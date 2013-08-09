@@ -4,9 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" x:Class="kinectTutorial.MainWindow"
-        Title="MainWindow" Height="500" Width="500" Loaded="Window_Loaded"
+        Title="MainWindow" Height="720" Width="960" Loaded="Window_Loaded" Closing="Window_Closing"
         Name="main">
-    <Grid>
-        <Image HorizontalAlignment="Left" Name="image1" Height="960" Margin="-231,-161,0,0" VerticalAlignment="Top" Width="1280" RenderTransformOrigin="-3.062,1.56"/>
-    </Grid>
+    <Canvas x:Name="EllipseCanvas" Background="Transparent" MouseMove="MouseMoveHandler">
+        <Image HorizontalAlignment="Left" Name="image1" Height="720" Margin="-336,0,0,-30"
+            VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>
+        <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"
+            Background="Green" Foreground="Red" Margin="0,0,0,462.8" />
+    </Canvas>
 </Window>
