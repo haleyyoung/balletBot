@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
+using kinectTutorial;
 
 namespace kinectTutorial
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// Most of the code to get the kinect set up and tracking a skeleton came
+    /// from http://channel9.msdn.com/Series/KinectQuickstart/
     /// </summary>
     public partial class MainWindow : Window
     {
         KinectSensor kinect = null;
         Skeleton[] skeletonData;
+        Skeleton skeleton;
+        Boolean pliesMode = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -35,7 +40,7 @@ namespace kinectTutorial
 
             var parameters = new TransformSmoothParameters
             {
-                Smoothing = 0.3f,
+                Smoothing = 0.1f,
                 Correction = 0.0f,
                 Prediction = 0.0f,
                 JitterRadius = 1.0f,
@@ -47,7 +52,7 @@ namespace kinectTutorial
             skeletonData = new Skeleton[kinect.SkeletonStream.FrameSkeletonArrayLength]; // Allocate ST data
 
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(SensorSkeletonFrameReady); // Get Ready for Skeleton Ready Events
-            
+
             kinect.Start(); // Start Kinect sensor
         }
 
@@ -61,62 +66,57 @@ namespace kinectTutorial
                 }
             }
 
-            
-
-            Skeleton skeleton = this.skeletonData.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
-            Render(skeleton);
+            skeleton = this.skeletonData.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
+            Render();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
         }
 
-        private void Render(Skeleton skeleton)
+        private void Render()
         {
             if (skeleton != null)
             {
-                // Obtain the left elbow joint; if tracked, print its position
-                Joint leftElbow = skeleton.Joints[JointType.ElbowLeft];
-                Joint rightElbow = skeleton.Joints[JointType.ElbowRight];
+                EllipseCanvas.Children.Clear();
                 Joint head = skeleton.Joints[JointType.Head];
-
-                double rangeLow = leftElbow.Position.Y - 0.1;
-                double rangeHigh = leftElbow.Position.Y + 0.1;
+                if (pliesMode)
+                {
+                    MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
+                    mode.Plies();
+                }
 
                 if (head.TrackingState == JointTrackingState.Tracked)
-                {                    
-                    EllipseCanvas.Children.Clear();
+                {
 
                     foreach (Joint joint in skeleton.Joints)
                     {
                        DrawJoint(joint);
                     }
                     DrawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
+                    // Right arm
                     DrawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderRight]);
                     DrawBone(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
                     DrawBone(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
                     DrawBone(skeleton.Joints[JointType.WristRight], skeleton.Joints[JointType.HandRight]);
+                    // Left arm
                     DrawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderLeft]);
                     DrawBone(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
                     DrawBone(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
                     DrawBone(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
+
                     DrawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.Spine]);
                     DrawBone(skeleton.Joints[JointType.Spine], skeleton.Joints[JointType.HipCenter]);
+                    // Right Leg
                     DrawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipRight]);
                     DrawBone(skeleton.Joints[JointType.HipRight], skeleton.Joints[JointType.KneeRight]);
                     DrawBone(skeleton.Joints[JointType.KneeRight], skeleton.Joints[JointType.AnkleRight]);
                     DrawBone(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
+                    // Left Leg
                     DrawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipLeft]);
                     DrawBone(skeleton.Joints[JointType.HipLeft], skeleton.Joints[JointType.KneeLeft]);
                     DrawBone(skeleton.Joints[JointType.KneeLeft], skeleton.Joints[JointType.AnkleLeft]);
                     DrawBone(skeleton.Joints[JointType.AnkleLeft], skeleton.Joints[JointType.FootLeft]);
-
-                    if (rightElbow.Position.Y < leftElbow.Position.Y)
-                    {
-                        // Console.WriteLine("Keep your elbows at the same height");
-                        //Console.WriteLine("Left elbow: " + leftElbow.Position.X +
-                        //    ", " + leftElbow.Position.Y + ", " + leftElbow.Position.Z);
-                    }
                 }
             }
             else
@@ -207,11 +207,10 @@ namespace kinectTutorial
             Application.Current.Shutdown();
         }
 
-        private void MouseMoveHandler(object sender, MouseEventArgs e)
+        private void PliesMode(object sender, RoutedEventArgs e)
         {
-            System.Windows.Point position = e.GetPosition(this);
-            double pX = position.X;
-            double pY = position.Y;
+            this.pliesMode = !pliesMode;
+            // TODO: change color of button
         }
     }
 }

@@ -2,14 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        x:Class="kinectTutorial.MainWindow"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:Class="kinectTutorial.MainWindow"
         Title="MainWindow" Height="720" Width="960" Loaded="Window_Loaded" Closing="Window_Closing"
         Name="main">
-    <Canvas x:Name="EllipseCanvas" Background="Transparent" MouseMove="MouseMoveHandler">
-        <Image HorizontalAlignment="Left" Name="image1" Height="720" Margin="-336,0,0,-30"
-            VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>
-        <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"
-            Background="Green" Foreground="Red" Margin="0,0,0,462.8" />
+    <Canvas x:Name="Canvas" Background="AliceBlue" MouseMove="MouseMoveHandler">
+        <Button Name="myButton" Content="Plies" Background="BlueViolet" Width="75" Height="23" Click="PliesMode" />
+        <Canvas x:Name="EllipseCanvas" Background="Transparent" MouseMove="MouseMoveHandler">
+            <Image HorizontalAlignment="Left" Name="image1" Height="720" Margin="-336,0,0,-30"
+                VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>
+            <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"
+                Background="Green" Foreground="Red" Margin="0,0,0,462.8" />
+        </Canvas>
     </Canvas>
 </Window>
