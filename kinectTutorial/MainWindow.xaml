@@ -6,9 +6,9 @@
         x:Class="kinectTutorial.MainWindow"
         Title="MainWindow" Height="720" Width="960" Loaded="Window_Loaded" Closing="Window_Closing"
         Name="main">
-    <Canvas x:Name="Canvas" Background="AliceBlue" MouseMove="MouseMoveHandler">
+    <Canvas x:Name="Canvas" Background="AliceBlue">
         <Button Name="myButton" Content="Plies" Background="BlueViolet" Width="75" Height="23" Click="PliesMode" />
-        <Canvas x:Name="EllipseCanvas" Background="Transparent" MouseMove="MouseMoveHandler">
+        <Canvas x:Name="EllipseCanvas" Background="Transparent">
             <Image HorizontalAlignment="Left" Name="image1" Height="720" Margin="-336,0,0,-30"
                 VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>
             <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"

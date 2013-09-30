@@ -28,6 +28,9 @@ namespace kinectTutorial
         Skeleton[] skeletonData;
         Skeleton skeleton;
         Boolean pliesMode = false;
+        private const int FRONT_VIEW = 0;
+        private const int SIDE_VIEW = 1;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -79,99 +82,18 @@ namespace kinectTutorial
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
-                Joint head = skeleton.Joints[JointType.Head];
+
                 if (pliesMode)
                 {
                     MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
-                    mode.Plies();
+                    mode.plies();
                 }
-
-                if (head.TrackingState == JointTrackingState.Tracked)
-                {
-
-                    foreach (Joint joint in skeleton.Joints)
-                    {
-                       DrawJoint(joint);
-                    }
-                    DrawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
-                    // Right arm
-                    DrawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderRight]);
-                    DrawBone(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
-                    DrawBone(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
-                    DrawBone(skeleton.Joints[JointType.WristRight], skeleton.Joints[JointType.HandRight]);
-                    // Left arm
-                    DrawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderLeft]);
-                    DrawBone(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
-                    DrawBone(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
-                    DrawBone(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
-
-                    DrawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.Spine]);
-                    DrawBone(skeleton.Joints[JointType.Spine], skeleton.Joints[JointType.HipCenter]);
-                    // Right Leg
-                    DrawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipRight]);
-                    DrawBone(skeleton.Joints[JointType.HipRight], skeleton.Joints[JointType.KneeRight]);
-                    DrawBone(skeleton.Joints[JointType.KneeRight], skeleton.Joints[JointType.AnkleRight]);
-                    DrawBone(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
-                    // Left Leg
-                    DrawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipLeft]);
-                    DrawBone(skeleton.Joints[JointType.HipLeft], skeleton.Joints[JointType.KneeLeft]);
-                    DrawBone(skeleton.Joints[JointType.KneeLeft], skeleton.Joints[JointType.AnkleLeft]);
-                    DrawBone(skeleton.Joints[JointType.AnkleLeft], skeleton.Joints[JointType.FootLeft]);
-                }
+                DrawSkeleton(skeleton, FRONT_VIEW);
+                DrawSkeleton(skeleton, SIDE_VIEW);
             }
             else
             {
                 System.Console.WriteLine("skeleton is null");
-            }
-        }
-
-        private void DrawJoint(Joint joint)
-        {
-            if (joint.TrackingState == JointTrackingState.Tracked)
-            {
-                Ellipse follow = new Ellipse() {Height = 5, Width = 5, Fill = Brushes.MediumOrchid};
-                EllipseCanvas.Children.Add(follow);
-                Canvas.SetTop(follow, joint.Position.Y * -250 + 247.5);
-                Canvas.SetLeft(follow, joint.Position.X * 250 + 247.5);
-            }
-        }
-
-        private void DrawBone(Joint start, Joint end)
-        {
-            if (start.TrackingState == JointTrackingState.Tracked && end.TrackingState == JointTrackingState.Tracked)
-            {
-                Point p1 = new Point(start.Position.X * 250 + 250, start.Position.Y * -250 + 250);
-                Point p2 = new Point(end.Position.X * 250 + 250, end.Position.Y * -250 + 250);
-                Line line = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 3};
-                EllipseCanvas.Children.Add(line);
-            }
-        }
-
-        private void TrackClosestSkeleton()
-        {
-            if (this.kinect != null && this.kinect.SkeletonStream != null)
-            {
-                if (!this.kinect.SkeletonStream.AppChoosesSkeletons)
-                {
-                    this.kinect.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
-                }
-
-                float closestDistance = 10000f; // Start with a far enough distance
-                int closestID = 0;
-
-                foreach (Skeleton skeleton in this.skeletonData.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
-                {
-                    if (skeleton.Position.Z < closestDistance)
-                    {
-                        closestID = skeleton.TrackingId;
-                        closestDistance = skeleton.Position.Z;
-                    }
-                }
-
-                if (closestID > 0)
-                {
-                    this.kinect.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
-                }
             }
         }
 
@@ -193,6 +115,12 @@ namespace kinectTutorial
             }
         }
 
+        private void PliesMode(object sender, RoutedEventArgs e)
+        {
+            this.pliesMode = !pliesMode;
+            // TODO: change color of button
+        }
+
         void StopKinect(KinectSensor sensor)
         {
             if (sensor != null)
@@ -205,12 +133,6 @@ namespace kinectTutorial
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs c)
         {
             Application.Current.Shutdown();
-        }
-
-        private void PliesMode(object sender, RoutedEventArgs e)
-        {
-            this.pliesMode = !pliesMode;
-            // TODO: change color of button
         }
     }
 }
