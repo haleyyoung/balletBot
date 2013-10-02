@@ -21,6 +21,36 @@ namespace kinectTutorial
     {
         private void DrawSkeleton(Skeleton skeleton, int view)
         {
+            Joint[] topOfBodyDrawOrder = {
+              skeleton.Joints[JointType.HandLeft],
+              skeleton.Joints[JointType.WristLeft],
+              skeleton.Joints[JointType.ElbowLeft],
+              skeleton.Joints[JointType.ShoulderLeft],
+              skeleton.Joints[JointType.ShoulderCenter],
+              skeleton.Joints[JointType.Head],
+              skeleton.Joints[JointType.ShoulderCenter],
+              skeleton.Joints[JointType.ShoulderRight],
+              skeleton.Joints[JointType.ElbowRight],
+              skeleton.Joints[JointType.WristRight],
+              skeleton.Joints[JointType.HandRight]
+            };
+
+            Joint[] bottomOfBodyDrawOrder = {
+              skeleton.Joints[JointType.FootLeft],
+              skeleton.Joints[JointType.AnkleLeft],
+              skeleton.Joints[JointType.KneeLeft],
+              skeleton.Joints[JointType.HipLeft],
+              skeleton.Joints[JointType.HipCenter],
+              skeleton.Joints[JointType.Spine],
+              skeleton.Joints[JointType.ShoulderCenter],
+              skeleton.Joints[JointType.Spine],
+              skeleton.Joints[JointType.HipCenter],
+              skeleton.Joints[JointType.HipRight],
+              skeleton.Joints[JointType.KneeRight],
+              skeleton.Joints[JointType.AnkleRight],
+              skeleton.Joints[JointType.FootRight]
+            };
+
             foreach (Joint joint in skeleton.Joints)
             {
                 if (joint.TrackingState == JointTrackingState.Tracked)
@@ -35,60 +65,43 @@ namespace kinectTutorial
                     }
                 }
             }
-            // TODO find a way to efficiently check if these are tracked
             if (view == FRONT_VIEW)
             {
-                DrawBoneFrontView(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
-                // Right arm
-                DrawBoneFrontView(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderRight]);
-                DrawBoneFrontView(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
-                DrawBoneFrontView(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
-                DrawBoneFrontView(skeleton.Joints[JointType.WristRight], skeleton.Joints[JointType.HandRight]);
-                // Left arm
-                DrawBoneFrontView(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderLeft]);
-                DrawBoneFrontView(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
-                DrawBoneFrontView(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
-                DrawBoneFrontView(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
-
-                DrawBoneFrontView(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.Spine]);
-                DrawBoneFrontView(skeleton.Joints[JointType.Spine], skeleton.Joints[JointType.HipCenter]);
-                // Right Leg
-                DrawBoneFrontView(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipRight]);
-                DrawBoneFrontView(skeleton.Joints[JointType.HipRight], skeleton.Joints[JointType.KneeRight]);
-                DrawBoneFrontView(skeleton.Joints[JointType.KneeRight], skeleton.Joints[JointType.AnkleRight]);
-                DrawBoneFrontView(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
-                // Left Leg
-                DrawBoneFrontView(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipLeft]);
-                DrawBoneFrontView(skeleton.Joints[JointType.HipLeft], skeleton.Joints[JointType.KneeLeft]);
-                DrawBoneFrontView(skeleton.Joints[JointType.KneeLeft], skeleton.Joints[JointType.AnkleLeft]);
-                DrawBoneFrontView(skeleton.Joints[JointType.AnkleLeft], skeleton.Joints[JointType.FootLeft]);
+                for (int i = 0; i < topOfBodyDrawOrder.Length - 1; i++)
+                {
+                    if (topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
+                        topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    {
+                        DrawBoneFrontView(topOfBodyDrawOrder[i], topOfBodyDrawOrder[i + 1]);
+                    }
+                }
+                for (int i = 0; i < bottomOfBodyDrawOrder.Length - 1; i++)
+                {
+                    if (bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
+                        bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    {
+                        DrawBoneFrontView(bottomOfBodyDrawOrder[i], bottomOfBodyDrawOrder[i + 1]);
+                    }
+                }
             }
             else if (view == SIDE_VIEW)
             {
-                DrawBoneSideView(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
-                // Right arm
-                DrawBoneSideView(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderRight]);
-                DrawBoneSideView(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
-                DrawBoneSideView(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
-                DrawBoneSideView(skeleton.Joints[JointType.WristRight], skeleton.Joints[JointType.HandRight]);
-                // Left arm
-                DrawBoneSideView(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderLeft]);
-                DrawBoneSideView(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
-                DrawBoneSideView(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
-                DrawBoneSideView(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
-
-                DrawBoneSideView(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.Spine]);
-                DrawBoneSideView(skeleton.Joints[JointType.Spine], skeleton.Joints[JointType.HipCenter]);
-                // Right Leg
-                DrawBoneSideView(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipRight]);
-                DrawBoneSideView(skeleton.Joints[JointType.HipRight], skeleton.Joints[JointType.KneeRight]);
-                DrawBoneSideView(skeleton.Joints[JointType.KneeRight], skeleton.Joints[JointType.AnkleRight]);
-                DrawBoneSideView(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
-                // Left Leg
-                DrawBoneSideView(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipLeft]);
-                DrawBoneSideView(skeleton.Joints[JointType.HipLeft], skeleton.Joints[JointType.KneeLeft]);
-                DrawBoneSideView(skeleton.Joints[JointType.KneeLeft], skeleton.Joints[JointType.AnkleLeft]);
-                DrawBoneSideView(skeleton.Joints[JointType.AnkleLeft], skeleton.Joints[JointType.FootLeft]);
+                for (int i = 0; i < topOfBodyDrawOrder.Length - 1; i++)
+                {
+                    if (topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
+                        topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    {
+                        DrawBoneSideView(topOfBodyDrawOrder[i], topOfBodyDrawOrder[i + 1]);
+                    }
+                }
+                for (int i = 0; i < bottomOfBodyDrawOrder.Length - 1; i++)
+                {
+                    if (bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
+                        bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    {
+                        DrawBoneSideView(bottomOfBodyDrawOrder[i], bottomOfBodyDrawOrder[i + 1]);
+                    }
+                }
             }
         }
 

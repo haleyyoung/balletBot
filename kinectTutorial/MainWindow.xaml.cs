@@ -118,6 +118,7 @@ namespace kinectTutorial
         private void PliesMode(object sender, RoutedEventArgs e)
         {
             this.pliesMode = !pliesMode;
+            Console.WriteLine(skeleton.Joints);
             // TODO: change color of button
         }
 
