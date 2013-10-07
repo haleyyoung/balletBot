@@ -68,7 +68,6 @@ namespace kinectTutorial
                     skeletonFrame.CopySkeletonDataTo(this.skeletonData); // get the skeletal information in this frame
                 }
             }
-
             skeleton = this.skeletonData.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
             Render();
         }

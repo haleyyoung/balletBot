@@ -32,6 +32,7 @@ namespace kinectTutorial
             {
                 hipAlignmentXAxis();
                 spineAlignmentYAxis();
+                shoulderAlignmentZAxis();
             }
         }
 
@@ -45,7 +46,7 @@ namespace kinectTutorial
 
             Joint leftHip = (skeleton.Joints[JointType.HipLeft]);
             Joint rightHip = (skeleton.Joints[JointType.HipRight]);
-            Range range = new Range(leftHip.Position.Y, Range.intermediateRange);
+            Range range = new Range(leftHip.Position.Y, Range.hipIntermediateRange);
             if (rightHip.Position.Y < range.minimum)
             {
                 text.Text = "Your RIGHT HIP is LOWER than your left";
@@ -67,17 +68,41 @@ namespace kinectTutorial
             Canvas.SetTop(text, 650);
             Canvas.SetLeft(text, 100);
 
-            Joint centerHip = (skeleton.Joints[JointType.HipCenter]);
-            Joint centerShoulder = (skeleton.Joints[JointType.ShoulderCenter]);
-            Range range = new Range(centerHip.Position.Y, Range.intermediateRange);
-            if (centerShoulder.Position.Y < range.minimum)
+            Joint centerHip = skeleton.Joints[JointType.HipCenter];
+            Joint centerShoulder = skeleton.Joints[JointType.ShoulderCenter];
+            Range hipsRange = new Range(centerShoulder.Position.Z, Range.hipsToShouldersIntermediateRange);
+            if (centerHip.Position.Z > hipsRange.maximum)
             {
-                text.Text = "Your HIPS are in front of your shoulders";
+                text.Inlines.Add("Your CABOOSE is sticking out");
                 text.Background = Brushes.DarkCyan;
             }
-            else if (centerShoulder.Position.Y > range.maximum)
+            else if (centerHip.Position.Z < hipsRange.minimum)
             {
-                text.Text = "Your CABOOSE is sticking out";
+                text.Inlines.Add("Your HIPS are in front of your shoulders");
+                text.Background = Brushes.Purple;
+            }
+            canvas.Children.Add(text);
+        }
+
+        public void shoulderAlignmentZAxis()
+        {
+            TextBlock text = new TextBlock();
+            text.FontSize = 25;
+            text.Foreground = Brushes.WhiteSmoke;
+            Canvas.SetTop(text, 550);
+            Canvas.SetLeft(text, 100);
+
+            Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft];
+            Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
+            Range range = new Range(leftShoulder.Position.Z, Range.hipsToShouldersIntermediateRange);
+            if (rightShoulder.Position.Z > range.maximum)
+            {
+                text.Inlines.Add("Your LEFT SHOULDER is in front of your right");
+                text.Background = Brushes.DarkCyan;
+            }
+            else if (rightShoulder.Position.Z < range.minimum)
+            {
+                text.Inlines.Add("Your RIGHT SHOULDER is in front of your left");
                 text.Background = Brushes.Purple;
             }
             canvas.Children.Add(text);
@@ -86,9 +111,15 @@ namespace kinectTutorial
 
     public class Range
     {
-        public const float easyRange = 0.005f;
-        public const float intermediateRange = 0.003f;
-        public const float hardRange = 0.001f;
+        // Hips x-axis alignment
+        public const float hipEasyRange = 0.005f;
+        public const float hipIntermediateRange = 0.003f;
+        public const float hipHardRange = 0.001f;
+
+        // Hips to shoulders y-axis alignment
+        public const float hipsToShouldersEasyRange = 0.05f;
+        public const float hipsToShouldersIntermediateRange = 0.01f;
+        public const float hipsToShouldersHardRange = 0.005f;
 
         public float minimum;
         public float maximum;
