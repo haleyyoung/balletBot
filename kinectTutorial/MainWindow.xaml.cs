@@ -27,7 +27,8 @@ namespace kinectTutorial
         KinectSensor kinect = null;
         Skeleton[] skeletonData;
         Skeleton skeleton;
-        Boolean pliesMode = false;
+        Gesture gesture;
+        public Boolean pliesMode = false;
         private const int FRONT_VIEW = 0;
         private const int SIDE_VIEW = 1;
 
@@ -68,7 +69,14 @@ namespace kinectTutorial
                     skeletonFrame.CopySkeletonDataTo(this.skeletonData); // get the skeletal information in this frame
                 }
             }
-            skeleton = this.skeletonData.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
+            try
+            {
+                skeleton = this.skeletonData.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
+            }
+            catch
+            {
+                Application.Current.Shutdown();
+            }
             Render();
         }
 
@@ -81,7 +89,14 @@ namespace kinectTutorial
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
-
+                if (this.gesture == null && this.skeleton != null)
+                {
+                    this.gesture = new Gesture(EllipseCanvas, skeleton, (UIElement)Canvas.FindName("pliesButton"));
+                }
+                if (this.gesture.gestureStart())
+                {
+                    this.pliesMode = !pliesMode;
+                }
                 if (pliesMode)
                 {
                     MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
@@ -117,7 +132,6 @@ namespace kinectTutorial
         private void PliesMode(object sender, RoutedEventArgs e)
         {
             this.pliesMode = !pliesMode;
-            Console.WriteLine(skeleton.Joints);
             // TODO: change color of button
         }
 
