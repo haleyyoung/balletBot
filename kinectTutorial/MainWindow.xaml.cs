@@ -91,7 +91,7 @@ namespace kinectTutorial
                 EllipseCanvas.Children.Clear();
                 if (this.gesture == null && this.skeleton != null)
                 {
-                    this.gesture = new Gesture(EllipseCanvas, skeleton, (UIElement)Canvas.FindName("pliesButton"));
+                    this.gesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
                 }
                 if (this.gesture.gestureStart())
                 {

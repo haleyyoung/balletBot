@@ -51,9 +51,10 @@ namespace kinectTutorial
               skeleton.Joints[JointType.FootRight]
             };
 
+            // Draw the joints
             foreach (Joint joint in skeleton.Joints)
             {
-                if (joint.TrackingState == JointTrackingState.Tracked)
+                if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
                 {
                     if (view == FRONT_VIEW)
                     {
@@ -65,39 +66,37 @@ namespace kinectTutorial
                     }
                 }
             }
-            if (view == FRONT_VIEW)
+
+            // Draw the bones
+            for (int i = 0; i < topOfBodyDrawOrder.Length - 1; i++)
             {
-                for (int i = 0; i < topOfBodyDrawOrder.Length - 1; i++)
+                if ((topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked ||
+                        topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Inferred) &&
+                    (topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked ||
+                        topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Inferred))
                 {
-                    if (topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
-                        topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    if (view == FRONT_VIEW)
                     {
                         DrawBoneFrontView(topOfBodyDrawOrder[i], topOfBodyDrawOrder[i + 1]);
                     }
-                }
-                for (int i = 0; i < bottomOfBodyDrawOrder.Length - 1; i++)
-                {
-                    if (bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
-                        bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
-                    {
-                        DrawBoneFrontView(bottomOfBodyDrawOrder[i], bottomOfBodyDrawOrder[i + 1]);
-                    }
-                }
-            }
-            else if (view == SIDE_VIEW)
-            {
-                for (int i = 0; i < topOfBodyDrawOrder.Length - 1; i++)
-                {
-                    if (topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
-                        topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    else if (view == SIDE_VIEW)
                     {
                         DrawBoneSideView(topOfBodyDrawOrder[i], topOfBodyDrawOrder[i + 1]);
                     }
                 }
-                for (int i = 0; i < bottomOfBodyDrawOrder.Length - 1; i++)
+            }
+            for (int i = 0; i < bottomOfBodyDrawOrder.Length - 1; i++)
+            {
+                if ((bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked ||
+                        bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Inferred) &&
+                    (bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked ||
+                        bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Inferred))
                 {
-                    if (bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked &&
-                        bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked)
+                    if (view == FRONT_VIEW)
+                    {
+                        DrawBoneFrontView(bottomOfBodyDrawOrder[i], bottomOfBodyDrawOrder[i + 1]);
+                    }
+                    else if (view == SIDE_VIEW)
                     {
                         DrawBoneSideView(bottomOfBodyDrawOrder[i], bottomOfBodyDrawOrder[i + 1]);
                     }
@@ -107,7 +106,7 @@ namespace kinectTutorial
 
         private void DrawJointFrontView(Joint joint)
         {
-            if (joint.TrackingState == JointTrackingState.Tracked)
+            if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
             {
                 Ellipse follow = new Ellipse() {Height = 5, Width = 5, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(follow);
@@ -118,7 +117,7 @@ namespace kinectTutorial
 
         private void DrawJointSideView(Joint joint)
         {
-            if (joint.TrackingState == JointTrackingState.Tracked)
+            if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
             {
                 Ellipse sideJoint = new Ellipse() {Height = 5, Width  = 5, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(sideJoint);
@@ -129,7 +128,10 @@ namespace kinectTutorial
 
         private void DrawBoneFrontView(Joint start, Joint end)
         {
-            if (start.TrackingState == JointTrackingState.Tracked && end.TrackingState == JointTrackingState.Tracked)
+            if ((start.TrackingState == JointTrackingState.Tracked ||
+                 start.TrackingState == JointTrackingState.Inferred) &&
+                (end.TrackingState == JointTrackingState.Tracked ||
+                 end.TrackingState == JointTrackingState.Inferred))
             {
                 Point p1 = new Point(start.Position.X * 250 + 250, start.Position.Y * -250 + 250);
                 Point p2 = new Point(end.Position.X * 250 + 250, end.Position.Y * -250 + 250);
@@ -140,7 +142,10 @@ namespace kinectTutorial
 
         private void DrawBoneSideView(Joint start, Joint end)
         {
-            if (start.TrackingState == JointTrackingState.Tracked && end.TrackingState == JointTrackingState.Tracked)
+            if ((start.TrackingState == JointTrackingState.Tracked ||
+                 start.TrackingState == JointTrackingState.Inferred) &&
+                (end.TrackingState == JointTrackingState.Tracked ||
+                 end.TrackingState == JointTrackingState.Inferred))
             {
                 Point p1 = new Point(start.Position.Z * 200 + 150, start.Position.Y * -250 + 250);
                 Point p2 = new Point( end.Position.Z * 200 + 150, end.Position.Y * -250 + 250);
