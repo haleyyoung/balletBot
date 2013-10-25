@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Controls;
+using Petzold.Media2D;
 
 namespace kinectTutorial
 {
@@ -40,50 +41,57 @@ namespace kinectTutorial
 
         public void hipAlignmentYAxis()
         {
-            TextBlock text = new TextBlock();
-            text.FontSize = 25;
-            text.Foreground = Brushes.WhiteSmoke;
-            Canvas.SetTop(text, 50);
-            Canvas.SetLeft(text, 100);
-
             Joint leftHip = (skeleton.Joints[JointType.HipLeft]);
             Joint rightHip = (skeleton.Joints[JointType.HipRight]);
             Range range = new Range(leftHip.Position.Y, Range.hipIntermediateRange);
+
+            Point p1 = new Point(rightHip.Position.X * 250 + 260, rightHip.Position.Y * -250 + 250);
+            Point p2 = new Point(leftHip.Position.X * 250 + 240, leftHip.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 3 };
+            Point p3;
+            ArrowLine directionLine = new ArrowLine();
+
             if (rightHip.Position.Y < range.minimum)
             {
-                text.Text = "Your RIGHT HIP is LOWER than your left";
-                text.Background = Brushes.DarkCyan;
+                p3 = new Point(leftHip.Position.X * 250 + 240, leftHip.Position.Y * -250 + 200);
+                directionLine = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 2 };
+                canvas.Children.Add(directionLine);
+                canvas.Children.Add(line);
             }
             else if (rightHip.Position.Y > range.maximum)
             {
-                text.Text = "Your LEFT HIP is LOWER than your right";
-                text.Background = Brushes.Purple;
+                p3 = new Point(rightHip.Position.X * 250 + 260, rightHip.Position.Y * -250 + 200);
+                directionLine = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p1.X, Y2 = p1.Y, Stroke = Brushes.Red, StrokeThickness = 2 };
+                canvas.Children.Add(directionLine);
+                canvas.Children.Add(line);
             }
-            canvas.Children.Add(text);
         }
 
         public void hipAlignmentZAxis()
         {
-            TextBlock text = new TextBlock();
-            text.FontSize = 25;
-            text.Foreground = Brushes.WhiteSmoke;
-            Canvas.SetTop(text, 150);
-            Canvas.SetLeft(text, 400);
-
             Joint leftHip = skeleton.Joints[JointType.HipLeft];
             Joint rightHip = skeleton.Joints[JointType.HipRight];
             Range range = new Range(leftHip.Position.Z, Range.hipIntermediateRange);
+
+            Point p1 = new Point(rightHip.Position.X * 250 + 260, rightHip.Position.Y * -250 + 250);
+            Point p2 = new Point(leftHip.Position.X * 250 + 240, leftHip.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 3 };
+            Point p3;
+            ArrowLine directionLine = new ArrowLine();
             if (rightHip.Position.Z > range.maximum)
             {
-                text.Inlines.Add("Your LEFT HIP is in front of your right");
-                text.Background = Brushes.DarkCyan;
+                p3 = new Point(rightHip.Position.X * 250 + 240, rightHip.Position.Y * -250 + 280);
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = Brushes.Yellow, StrokeThickness = 2 };
+                canvas.Children.Add(directionLine);
+                canvas.Children.Add(line);
             }
             else if (rightHip.Position.Z < range.minimum)
             {
-                text.Inlines.Add("Your RIGHT HIP is in front of your left");
-                text.Background = Brushes.Purple;
+                p3 = new Point(leftHip.Position.X * 250 + 260, leftHip.Position.Y * -250 + 280);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = Brushes.Yellow, StrokeThickness = 2 };
+                canvas.Children.Add(directionLine);
+                canvas.Children.Add(line);
             }
-            canvas.Children.Add(text);
         }
 
         public void spineAlignmentYAxis()
