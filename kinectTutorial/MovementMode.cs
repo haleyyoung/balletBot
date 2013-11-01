@@ -20,6 +20,10 @@ namespace kinectTutorial
     {
         public Canvas canvas;
         public Skeleton skeleton;
+        private SolidColorBrush correctionLineColor = Brushes.Red;
+        private SolidColorBrush frontBackColor = Brushes.Yellow;
+        private SolidColorBrush sideSideColor = Brushes.Orange;
+        private SolidColorBrush upDownColor = Brushes.Green;
 
         public MovementMode(Canvas canvas, Skeleton skeleton)
         {
@@ -45,25 +49,25 @@ namespace kinectTutorial
             Joint rightHip = (skeleton.Joints[JointType.HipRight]);
             Range range = new Range(leftHip.Position.Y, Range.hipIntermediateRange);
 
-            Point p1 = new Point(rightHip.Position.X * 250 + 260, rightHip.Position.Y * -250 + 250);
-            Point p2 = new Point(leftHip.Position.X * 250 + 240, leftHip.Position.Y * -250 + 250);
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 3 };
+            Point p1 = new Point(rightHip.Position.X * 250 + 250, rightHip.Position.Y * -250 + 250);
+            Point p2 = new Point(leftHip.Position.X * 250 + 250, leftHip.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 3 };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
 
             if (rightHip.Position.Y < range.minimum)
             {
-                p3 = new Point(leftHip.Position.X * 250 + 240, leftHip.Position.Y * -250 + 200);
-                directionLine = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 2 };
-                canvas.Children.Add(directionLine);
+                p3 = new Point(leftHip.Position.X * 250 + 250, leftHip.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 2 };
                 canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
             else if (rightHip.Position.Y > range.maximum)
             {
-                p3 = new Point(rightHip.Position.X * 250 + 260, rightHip.Position.Y * -250 + 200);
-                directionLine = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p1.X, Y2 = p1.Y, Stroke = Brushes.Red, StrokeThickness = 2 };
-                canvas.Children.Add(directionLine);
+                p3 = new Point(rightHip.Position.X * 250 + 250, rightHip.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 2 };
                 canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
         }
 
@@ -73,97 +77,109 @@ namespace kinectTutorial
             Joint rightHip = skeleton.Joints[JointType.HipRight];
             Range range = new Range(leftHip.Position.Z, Range.hipIntermediateRange);
 
-            Point p1 = new Point(rightHip.Position.X * 250 + 260, rightHip.Position.Y * -250 + 250);
-            Point p2 = new Point(leftHip.Position.X * 250 + 240, leftHip.Position.Y * -250 + 250);
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.Red, StrokeThickness = 3 };
+            Point p1 = new Point(rightHip.Position.X * 250 + 250, rightHip.Position.Y * -250 + 250);
+            Point p2 = new Point(leftHip.Position.X * 250 + 250, leftHip.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 3 };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
             if (rightHip.Position.Z > range.maximum)
             {
-                p3 = new Point(rightHip.Position.X * 250 + 240, rightHip.Position.Y * -250 + 280);
-                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = Brushes.Yellow, StrokeThickness = 2 };
-                canvas.Children.Add(directionLine);
+                p3 = new Point(rightHip.Position.X * 250 + 250, rightHip.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 2 };
                 canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
             else if (rightHip.Position.Z < range.minimum)
             {
-                p3 = new Point(leftHip.Position.X * 250 + 260, leftHip.Position.Y * -250 + 280);
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = Brushes.Yellow, StrokeThickness = 2 };
-                canvas.Children.Add(directionLine);
+                p3 = new Point(leftHip.Position.X * 250 + 250, leftHip.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 2 };
                 canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
         }
 
         public void spineAlignmentYAxis()
         {
-            TextBlock text = new TextBlock();
-            text.FontSize = 25;
-            text.Foreground = Brushes.WhiteSmoke;
-            Canvas.SetTop(text, 250);
-            Canvas.SetLeft(text, 100);
-
             Joint centerHip = skeleton.Joints[JointType.HipCenter];
             Joint centerShoulder = skeleton.Joints[JointType.ShoulderCenter];
             Range hipsRange = new Range(centerShoulder.Position.Z, Range.hipsToShouldersIntermediateRange);
+
+            Point p1 = new Point(centerHip.Position.X * 250 + 250, centerHip.Position.Y * -250 + 250);
+            Point p2 = new Point(centerShoulder.Position.X * 250 + 250, centerShoulder.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 3 };
+            Point p3;
+            ArrowLine directionLine = new ArrowLine();
+
             if (centerHip.Position.Z > hipsRange.maximum)
             {
-                text.Inlines.Add("Your CABOOSE is sticking out");
-                text.Background = Brushes.DarkCyan;
+                p3 = new Point(centerShoulder.Position.X * 250 + 250, centerShoulder.Position.Y * -250 + 200);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 2 };
+                canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
             else if (centerHip.Position.Z < hipsRange.minimum)
             {
-                text.Inlines.Add("Your HIPS are in front of your shoulders");
-                text.Background = Brushes.Purple;
+                p3 = new Point(centerShoulder.Position.X * 250 + 250, centerShoulder.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 2 };
+                canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
-            canvas.Children.Add(text);
         }
 
         public void shoulderAlignmentYAxis()
         {
-            TextBlock text = new TextBlock();
-            text.FontSize = 25;
-            text.Foreground = Brushes.WhiteSmoke;
-            Canvas.SetTop(text, 350);
-            Canvas.SetLeft(text, 400);
-
             Joint leftShoulder = (skeleton.Joints[JointType.ShoulderLeft]);
             Joint rightShoulder = (skeleton.Joints[JointType.ShoulderRight]);
             Range range = new Range(leftShoulder.Position.Y, Range.shoulderYIntermediateRange);
+
+            Point p1 = new Point(leftShoulder.Position.X * 250 + 250, leftShoulder.Position.Y * -250 + 250);
+            Point p2 = new Point(rightShoulder.Position.X * 250 + 250, rightShoulder.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 3 };
+            Point p3;
+            ArrowLine directionLine = new ArrowLine();
+
             if (rightShoulder.Position.Y < range.minimum)
             {
-                text.Text = "Your RIGHT SHOULDER is LOWER than your left";
-                text.Background = Brushes.DarkCyan;
+                p3 = new Point(leftShoulder.Position.X * 250 + 250, leftShoulder.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 2 };
+                canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
             else if (rightShoulder.Position.Y > range.maximum)
             {
-                text.Text = "Your LEFT SHOULDER is LOWER than your right";
-                text.Background = Brushes.Purple;
+                p3 = new Point(rightShoulder.Position.X * 250 + 250, rightShoulder.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 2 };
+                canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
-            canvas.Children.Add(text);
         }
 
         public void shoulderAlignmentZAxis()
         {
-            TextBlock text = new TextBlock();
-            text.FontSize = 25;
-            text.Foreground = Brushes.WhiteSmoke;
-            Canvas.SetTop(text, 450);
-            Canvas.SetLeft(text, 100);
-
             Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft];
             Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
             Range range = new Range(leftShoulder.Position.Z, Range.shoulderIntermediateRange);
+
+            Point p1 = new Point(leftShoulder.Position.X * 250 + 250, leftShoulder.Position.Y * -250 + 250);
+            Point p2 = new Point(rightShoulder.Position.X * 250 + 250, rightShoulder.Position.Y * -250 + 250);
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 3 };
+            Point p3;
+            ArrowLine directionLine = new ArrowLine();
+
             if (rightShoulder.Position.Z > range.maximum)
             {
-                text.Inlines.Add("Your LEFT SHOULDER is in front of your right");
-                text.Background = Brushes.DarkCyan;
+                p3 = new Point(leftShoulder.Position.X * 250 + 250, leftShoulder.Position.Y * -250 + 200);
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 2 };
+                canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
             else if (rightShoulder.Position.Z < range.minimum)
             {
-                text.Inlines.Add("Your RIGHT SHOULDER is in front of your left");
-                text.Background = Brushes.Purple;
+                p3 = new Point(rightShoulder.Position.X * 250 + 250, rightShoulder.Position.Y * -250 + 300);
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 2 };
+                canvas.Children.Add(line);
+                canvas.Children.Add(directionLine);
             }
-            canvas.Children.Add(text);
         }
     }
 

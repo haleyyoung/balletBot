@@ -97,13 +97,15 @@ namespace kinectTutorial
                 {
                     this.pliesMode = !pliesMode;
                 }
+
+                DrawSkeleton(skeleton, FRONT_VIEW);
+                DrawSkeleton(skeleton, SIDE_VIEW);
+
                 if (pliesMode)
                 {
                     MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
                     mode.plies();
                 }
-                DrawSkeleton(skeleton, FRONT_VIEW);
-                DrawSkeleton(skeleton, SIDE_VIEW);
             }
             else
             {
