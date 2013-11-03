@@ -29,6 +29,55 @@ namespace kinectTutorial
         {
             this.canvas = canvas;
             this.skeleton = skeleton;
+            this.canvas.Children.Add(drawKey());
+        }
+
+        public Canvas drawKey()
+        {
+            Canvas canvas = new Canvas();
+            TextBlock upDownMovement = new TextBlock();
+            upDownMovement.FontSize = 20;
+            upDownMovement.Foreground = Brushes.WhiteSmoke;
+            upDownMovement.Text = "Move up or down";
+            TextBlock sideToSideMovement = new TextBlock();
+            sideToSideMovement.FontSize = 20;
+            sideToSideMovement.Foreground = Brushes.WhiteSmoke;
+            sideToSideMovement.Text = "Move left or right";
+            TextBlock forwardBackwardMovement = new TextBlock();
+            forwardBackwardMovement.FontSize = 20;
+            forwardBackwardMovement.Foreground = Brushes.WhiteSmoke;
+            forwardBackwardMovement.Text = "Move front or back";
+
+            Point p1 = new Point(660, 10);
+            Point p2 = new Point(660, 30);
+            ArrowLine downArrow = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = upDownColor, StrokeThickness = 2 };
+            ArrowLine upArrow = new ArrowLine() { X1 = p2.X + 20, Y1 = p2.Y, X2 = p1.X + 20, Y2 = p1.Y, Stroke = upDownColor, StrokeThickness = 2 };
+            Point p3 = new Point(660, 50);
+            Point p4 = new Point(680, 50);
+            ArrowLine rightArrow = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p4.X, Y2 = p4.Y, Stroke = sideSideColor, StrokeThickness = 2 };
+            ArrowLine leftArrow = new ArrowLine() { X1 = p4.X + 30, Y1 = p4.Y, X2 = p3.X + 30, Y2 = p3.Y, Stroke = sideSideColor, StrokeThickness = 2 };
+            Point p5 = new Point(660, 80);
+            Point p6 = new Point(680, 100);
+            ArrowLine frontArrow = new ArrowLine() { X1 = p5.X, Y1 = p5.Y, X2 = p6.X, Y2 = p6.Y, Stroke = frontBackColor, StrokeThickness = 2 };
+            ArrowLine backArrow = new ArrowLine() { X1 = p6.X + 30, Y1 = p6.Y, X2 = p5.X + 30, Y2 = p5.Y, Stroke = frontBackColor, StrokeThickness = 2 };
+
+            canvas.Children.Add(upDownMovement);
+            canvas.Children.Add(sideToSideMovement);
+            canvas.Children.Add(forwardBackwardMovement);
+            canvas.Children.Add(downArrow);
+            canvas.Children.Add(upArrow);
+            canvas.Children.Add(rightArrow);
+            canvas.Children.Add(leftArrow);
+            canvas.Children.Add(frontArrow);
+            canvas.Children.Add(backArrow);
+            Canvas.SetTop(upDownMovement, 10);
+            Canvas.SetLeft(upDownMovement, 715);
+            Canvas.SetTop(sideToSideMovement, 40);
+            Canvas.SetLeft(sideToSideMovement, 715);
+            Canvas.SetTop(forwardBackwardMovement, 80);
+            Canvas.SetLeft(forwardBackwardMovement, 715);
+
+            return canvas;
         }
 
         public void plies()
