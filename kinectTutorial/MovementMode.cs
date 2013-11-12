@@ -230,6 +230,21 @@ namespace kinectTutorial
                 canvas.Children.Add(directionLine);
             }
         }
+
+        public Boolean turnoutCheck()
+        {
+            Joint leftAnkle = skeleton.Joints[JointType.AnkleLeft];
+            Joint leftFoot = skeleton.Joints[JointType.FootLeft];
+            Joint rightAnkle = skeleton.Joints[JointType.AnkleRight];
+            Joint rightFoot = skeleton.Joints[JointType.FootRight];
+
+            if (rightFoot.Position.X <= rightAnkle.Position.X &&
+                leftFoot.Position.X >= leftAnkle.Position.X)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
     public class Range

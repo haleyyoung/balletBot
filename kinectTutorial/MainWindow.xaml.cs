@@ -103,8 +103,18 @@ namespace kinectTutorial
 
                 if (pliesMode)
                 {
-                    MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
-                    mode.plies();
+                    //MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
+                    //mode.plies();
+                    Plie plie = new Plie(EllipseCanvas, skeleton);
+                    Boolean plieStatus = plie.plieStart();
+                    if (!plieStatus)
+                    {
+                        TextBlock warning = new TextBlock();
+                        warning.Text = "You're not doing a plie!!!";
+                        Canvas.Children.Add(warning);
+                        Canvas.SetTop(warning, 500);
+                        Canvas.SetLeft(warning, 200);
+                    }
                 }
             }
             else

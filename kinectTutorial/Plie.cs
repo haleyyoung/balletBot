@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 using kinectTutorial;
-using MovementMode;
 
 namespace kinectTutorial
 {
@@ -135,7 +134,24 @@ namespace kinectTutorial
             if (this.leftKneeBottom == null || this.rightKneeBottom == null)
             {
                 if (leftKnee.Position.Y <= leftKneeRange.maximum &&
-                    rightKnee.Position.Y <= rightKneeRange.maximum
+                    rightKnee.Position.Y <= rightKneeRange.maximum &&
+                    // Make sure feet are turned out
+                    leftFoot.Position.X >= leftAnkle.Position.X &&
+                    rightFoot.Position.X <= rightAnkle.Position.X &&
+                    // Check to make sure feet haven't moved
+                    this.leftFootXRange.minimum <= leftFoot.Position.X &&
+                    this.leftFootXRange.maximum >= leftFoot.Position.X &&
+                    this.leftFootYRange.minimum <= leftFoot.Position.Y &&
+                    this.leftFootYRange.maximum >= leftFoot.Position.Y &&
+                    this.leftFootZRange.minimum <= leftFoot.Position.Z &&
+                    this.leftFootZRange.maximum >= leftFoot.Position.Z &&
+                    this.rightFootXRange.minimum <= rightFoot.Position.X &&
+                    this.rightFootXRange.maximum >= rightFoot.Position.X &&
+                    this.rightFootYRange.minimum <= rightFoot.Position.Y &&
+                    this.rightFootYRange.maximum >= rightFoot.Position.Y &&
+                    this.rightFootZRange.minimum <= rightFoot.Position.Z &&
+                    this.rightFootZRange.maximum >= rightFoot.Position.Z
+
                     )
                 {
                     return true;
@@ -151,7 +167,24 @@ namespace kinectTutorial
             else
             {
                 if (leftKnee.Position.Y >= leftKneeRange.minimum &&
-                    rightKnee.Position.Y >= rightKneeRange.minimum)
+                    rightKnee.Position.Y >= rightKneeRange.minimum &&
+                    // Make sure feet are turned out
+                    leftFoot.Position.X >= leftAnkle.Position.X &&
+                    rightFoot.Position.X <= rightAnkle.Position.X &&
+                    // Check to make sure feet haven't moved
+                    this.leftFootXRange.minimum <= leftFoot.Position.X &&
+                    this.leftFootXRange.maximum >= leftFoot.Position.X &&
+                    this.leftFootYRange.minimum <= leftFoot.Position.Y &&
+                    this.leftFootYRange.maximum >= leftFoot.Position.Y &&
+                    this.leftFootZRange.minimum <= leftFoot.Position.Z &&
+                    this.leftFootZRange.maximum >= leftFoot.Position.Z &&
+                    this.rightFootXRange.minimum <= rightFoot.Position.X &&
+                    this.rightFootXRange.maximum >= rightFoot.Position.X &&
+                    this.rightFootYRange.minimum <= rightFoot.Position.Y &&
+                    this.rightFootYRange.maximum >= rightFoot.Position.Y &&
+                    this.rightFootZRange.minimum <= rightFoot.Position.Z &&
+                    this.rightFootZRange.maximum >= rightFoot.Position.Z
+                   )
                 {
                     return true;
                 }
