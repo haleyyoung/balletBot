@@ -54,13 +54,14 @@ namespace kinectTutorial
         // sequence to complete a plie.
         // If the user deviates from the movements involved to complete a plie,
         // the method will return false.
-        public Boolean plieStart()
+        public Boolean trackPlie()
         {
+
+
             if (skeleton == null)
             {
                 return false;
             }
-
             // Alignment checks
             MovementMode plie = new MovementMode(this.canvas, this.skeleton);
             plie.hipAlignmentYAxis();
@@ -131,68 +132,143 @@ namespace kinectTutorial
             // Folllow process of movement for a plie
 
             // On our way down
-            if (this.leftKneeBottom == null || this.rightKneeBottom == null)
+            if (this.leftKneeBottom.TrackingState == JointTrackingState.NotTracked ||
+                this.rightKneeBottom.TrackingState == JointTrackingState.NotTracked)
             {
+                TextBlock blah = new TextBlock();
                 if (leftKnee.Position.Y <= leftKneeRange.maximum &&
                     rightKnee.Position.Y <= rightKneeRange.maximum &&
                     // Make sure feet are turned out
-                    leftFoot.Position.X >= leftAnkle.Position.X &&
-                    rightFoot.Position.X <= rightAnkle.Position.X &&
+                    leftFootTurnout() &&
+                    rightFootTurnout() &&
                     // Check to make sure feet haven't moved
-                    this.leftFootXRange.minimum <= leftFoot.Position.X &&
-                    this.leftFootXRange.maximum >= leftFoot.Position.X &&
-                    this.leftFootYRange.minimum <= leftFoot.Position.Y &&
-                    this.leftFootYRange.maximum >= leftFoot.Position.Y &&
-                    this.leftFootZRange.minimum <= leftFoot.Position.Z &&
-                    this.leftFootZRange.maximum >= leftFoot.Position.Z &&
-                    this.rightFootXRange.minimum <= rightFoot.Position.X &&
-                    this.rightFootXRange.maximum >= rightFoot.Position.X &&
-                    this.rightFootYRange.minimum <= rightFoot.Position.Y &&
-                    this.rightFootYRange.maximum >= rightFoot.Position.Y &&
-                    this.rightFootZRange.minimum <= rightFoot.Position.Z &&
-                    this.rightFootZRange.maximum >= rightFoot.Position.Z
-
-                    )
+                    leftFootStable() &&
+                    rightFootStable()
+                )
                 {
+                    blah.Text = "tracking plie " + leftKnee.Position.Y + " " + leftKneeRange.maximum + " " + this.leftKneeBottom.TrackingState;
+                    blah.Background = Brushes.Red;
+                    canvas.Children.Add(blah);
+                    Canvas.SetTop(blah, 100);
                     return true;
                 }
-                else
-                {
-                    this.leftKneeBottom = leftKnee;
-                    this.rightKneeBottom = rightKnee;
-                    return true;
-                }
+                blah.Text = "setting bottom";
+                blah.Background = Brushes.Pink;
+                canvas.Children.Add(blah);
+                Canvas.SetTop(blah, 700);
+                this.leftKneeBottom = leftKnee;
+                this.rightKneeBottom = rightKnee;
+                return true;
             }
             // On our way up
             else
             {
+                TextBlock blah = new TextBlock();
                 if (leftKnee.Position.Y >= leftKneeRange.minimum &&
                     rightKnee.Position.Y >= rightKneeRange.minimum &&
                     // Make sure feet are turned out
-                    leftFoot.Position.X >= leftAnkle.Position.X &&
-                    rightFoot.Position.X <= rightAnkle.Position.X &&
+                    leftFootTurnout() &&
+                    rightFootTurnout() &&
                     // Check to make sure feet haven't moved
-                    this.leftFootXRange.minimum <= leftFoot.Position.X &&
-                    this.leftFootXRange.maximum >= leftFoot.Position.X &&
-                    this.leftFootYRange.minimum <= leftFoot.Position.Y &&
-                    this.leftFootYRange.maximum >= leftFoot.Position.Y &&
-                    this.leftFootZRange.minimum <= leftFoot.Position.Z &&
-                    this.leftFootZRange.maximum >= leftFoot.Position.Z &&
-                    this.rightFootXRange.minimum <= rightFoot.Position.X &&
-                    this.rightFootXRange.maximum >= rightFoot.Position.X &&
-                    this.rightFootYRange.minimum <= rightFoot.Position.Y &&
-                    this.rightFootYRange.maximum >= rightFoot.Position.Y &&
-                    this.rightFootZRange.minimum <= rightFoot.Position.Z &&
-                    this.rightFootZRange.maximum >= rightFoot.Position.Z
+                    leftFootStable() &&
+                    rightFootStable()
                    )
                 {
+                    blah.Text = "on our way up";
+                    blah.Background = Brushes.Red;
+                    canvas.Children.Add(blah);
+                    Canvas.SetTop(blah, 600);
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+                blah.Text = "returning false";
+                blah.Background = Brushes.Red;
+                canvas.Children.Add(blah);
+                Canvas.SetTop(blah, 100);
+                return true;
+                return false;
             }
+        }
+
+        public Boolean leftFootStable()
+        {
+            TextBlock blah = new TextBlock();
+            blah.Background = Brushes.Orange;
+            canvas.Children.Add(blah);
+            Canvas.SetTop(blah, 200);
+            Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
+
+            if (this.leftFootXRange.minimum <= leftFoot.Position.X &&
+                this.leftFootXRange.maximum >= leftFoot.Position.X &&
+                this.leftFootYRange.minimum <= leftFoot.Position.Y &&
+                this.leftFootYRange.maximum >= leftFoot.Position.Y &&
+                this.leftFootZRange.minimum <= leftFoot.Position.Z &&
+                this.leftFootZRange.maximum >= leftFoot.Position.Z
+            )
+            {
+                blah.Text = "stable";
+                return true;
+            }
+            blah.Text = "left foot NOT stable";
+            return false;
+        }
+
+        public Boolean rightFootStable()
+        {
+            TextBlock blah = new TextBlock();
+            blah.Background = Brushes.Orange;
+            canvas.Children.Add(blah);
+            Canvas.SetTop(blah, 300);
+            Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
+
+            if (this.rightFootXRange.minimum <= rightFoot.Position.X &&
+                this.rightFootXRange.maximum >= rightFoot.Position.X &&
+                this.rightFootYRange.minimum <= rightFoot.Position.Y &&
+                this.rightFootYRange.maximum >= rightFoot.Position.Y &&
+                this.rightFootZRange.minimum <= rightFoot.Position.Z &&
+                this.rightFootZRange.maximum >= rightFoot.Position.Z
+            )
+            {
+                blah.Text = "stable";
+                return true;
+            }
+            blah.Text = "right foot NOT stable";
+            return false;
+        }
+
+        public Boolean leftFootTurnout()
+        {
+            TextBlock blah = new TextBlock();
+            blah.Background = Brushes.Orange;
+            canvas.Children.Add(blah);
+            Canvas.SetTop(blah, 400);
+            Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
+            Joint leftAnkle = this.skeleton.Joints[JointType.AnkleLeft];
+
+            if (leftFoot.Position.X >= leftAnkle.Position.X)
+            {
+                blah.Text = "turned out";
+                return true;
+            }
+            blah.Text = "left foot NOT turned out";
+            return false;
+        }
+
+        public Boolean rightFootTurnout()
+        {
+            TextBlock blah = new TextBlock();
+            blah.Background = Brushes.Orange;
+            canvas.Children.Add(blah);
+            Canvas.SetTop(blah, 500);
+            Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
+            Joint rightAnkle = this.skeleton.Joints[JointType.AnkleRight];
+
+            if (rightFoot.Position.X <= rightAnkle.Position.X)
+            {
+                blah.Text = "turned out";
+                return true;
+            }
+            blah.Text = "right foot NOT turned out";
+            return false;
         }
     }
 }

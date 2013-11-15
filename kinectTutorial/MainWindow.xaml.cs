@@ -103,14 +103,13 @@ namespace kinectTutorial
 
                 if (pliesMode)
                 {
-                    //MovementMode mode = new MovementMode(EllipseCanvas, skeleton);
-                    //mode.plies();
                     Plie plie = new Plie(EllipseCanvas, skeleton);
-                    Boolean plieStatus = plie.plieStart();
+                    Boolean plieStatus = plie.trackPlie();
                     if (!plieStatus)
                     {
                         TextBlock warning = new TextBlock();
                         warning.Text = "You're not doing a plie!!!";
+                        warning.Background = Brushes.Lime;
                         Canvas.Children.Add(warning);
                         Canvas.SetTop(warning, 500);
                         Canvas.SetLeft(warning, 200);
