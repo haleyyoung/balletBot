@@ -146,14 +146,16 @@ namespace kinectTutorial
                     rightFootStable()
                 )
                 {
-                    blah.Text = "tracking plie " + leftKnee.Position.Y + " " + leftKneeRange.maximum + " " + this.leftKneeBottom.TrackingState;
+                    blah.Text = "tracking plie " + leftKnee.Position.Y + " " + leftKneeRange.maximum;
                     blah.Background = Brushes.Red;
+                    blah.FontSize = 20;
                     canvas.Children.Add(blah);
-                    Canvas.SetTop(blah, 100);
+                    Canvas.SetTop(blah, 200);
                     return true;
                 }
                 blah.Text = "setting bottom";
                 blah.Background = Brushes.Pink;
+                blah.FontSize = 20;
                 canvas.Children.Add(blah);
                 Canvas.SetTop(blah, 700);
                 this.leftKneeBottom = leftKnee;
@@ -176,15 +178,16 @@ namespace kinectTutorial
                 {
                     blah.Text = "on our way up";
                     blah.Background = Brushes.Red;
+                    blah.FontSize = 20;
                     canvas.Children.Add(blah);
                     Canvas.SetTop(blah, 600);
                     return true;
                 }
                 blah.Text = "returning false";
-                blah.Background = Brushes.Red;
+                blah.Background = Brushes.Green;
+                blah.FontSize = 20;
                 canvas.Children.Add(blah);
-                Canvas.SetTop(blah, 100);
-                return true;
+                Canvas.SetTop(blah, 300);
                 return false;
             }
         }

@@ -50,24 +50,28 @@ namespace kinectTutorial
             Joint hand = skeleton.Joints[JointType.HandLeft];
             double handYDrawn = hand.Position.Y * -250 + 247.5;
             double handXDrawn = hand.Position.X * 250 + 247.5;
-            double pliesButtonTop = Canvas.GetTop(this.button);
-            double pliesButtonBottom = pliesButtonTop + 23;
-            double pliesButtonLeft = Canvas.GetLeft(this.button);
-            double pliesButtonRight = pliesButtonLeft + 75;
+            double buttonTop = Canvas.GetTop(this.button);
+            double buttonBottom = buttonTop + 23;
+            double buttonLeft = Canvas.GetLeft(this.button);
+            double buttonRight = buttonLeft + 75;
             Rectangle buttonFill = new Rectangle();
 
-            if (handYDrawn >= pliesButtonTop && handYDrawn <= pliesButtonBottom &&
-                handXDrawn >= pliesButtonLeft && handXDrawn <= pliesButtonRight)
+            if (handYDrawn >= buttonTop && handYDrawn <= buttonBottom &&
+                handXDrawn >= buttonLeft && handXDrawn <= buttonRight)
             {
-                this.frameCount++;
+                if (this.frameCount == this.holdButtonLength)
+                {
+                    return false;
+                }
+                    this.frameCount++;
 
-                buttonFill.Width = this.button.ActualWidth * this.frameCount/this.holdButtonLength;
-                buttonFill.Height = this.button.ActualHeight;
-                buttonFill.Fill = buttonOn ? this.buttonOffColor : this.buttonOnColor;
-                buttonFill.Stroke = buttonOn ? this.buttonOnBorderColor : this.buttonOffBorderColor;
-                canvas.Children.Add(buttonFill);
-                Canvas.SetTop(buttonFill, Canvas.GetTop(this.button));
-                Canvas.SetLeft(buttonFill, Canvas.GetLeft(this.button));
+                    buttonFill.Width = this.button.ActualWidth * this.frameCount / this.holdButtonLength;
+                    buttonFill.Height = this.button.ActualHeight;
+                    buttonFill.Fill = buttonOn ? this.buttonOffColor : this.buttonOnColor;
+                    buttonFill.Stroke = buttonOn ? this.buttonOnBorderColor : this.buttonOffBorderColor;
+                    canvas.Children.Add(buttonFill);
+                    Canvas.SetTop(buttonFill, Canvas.GetTop(this.button));
+                    Canvas.SetLeft(buttonFill, Canvas.GetLeft(this.button));
             }
             else
             {
@@ -75,7 +79,6 @@ namespace kinectTutorial
             }
             if (this.frameCount == this.holdButtonLength)
             {
-                this.frameCount = 0;
                 this.buttonOn = !this.buttonOn;
                 this.button.Fill = buttonFill.Fill;
                 this.button.Stroke = buttonFill.Stroke;
