@@ -66,5 +66,12 @@ namespace kinectTutorial.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        public static byte[] IMG_1923 {
+            get {
+                object obj = ResourceManager.GetObject("IMG_1923", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

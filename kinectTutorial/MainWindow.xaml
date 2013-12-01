@@ -17,6 +17,7 @@
                 VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>
             <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"
                 Background="Green" Foreground="Red" Margin="0,0,0,462.8" />
+            <MediaElement Source="Resources/IMG_1923.wmv" Width="300" Height="700"/>
         </Canvas>
     </Canvas>
 </Window>
