@@ -13,3 +13,5 @@ rather than a human being.
 I have been told many times that this project is too ambitious so at this time, I'm not hoping to
 be able to teach a user to be a prima ballerina, but rather give them a solid basis in ballet
 by teaching good habits.
+
+[Prezi] (http://prezi.com/bvjz3hjtits4/?utm_campaign=share&utm_medium=copy)
