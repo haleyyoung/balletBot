@@ -1,4 +1,4 @@
-balletBot
+# balletBot
 =========
 
 Senior Project - 402
@@ -15,3 +15,14 @@ be able to teach a user to be a prima ballerina, but rather give them a solid ba
 by teaching good habits.
 
 [Prezi] (http://prezi.com/bvjz3hjtits4/?utm_campaign=share&utm_medium=copy)
+
+## Setup
+========
+
+In order to set up this project on your own computer you need:
+
+  1. Windows OS
+  2. xBox Kinect
+  2. [Microsoft Visual Studio] (http://go.microsoft.com/?linkid=9709939)
+  3. [Kinect for Windows SDK] (http://go.microsoft.com/fwlink/?LinkID=323588) (mostly for the driver it installs for the Kinect)
+  4. [A clone of this repository] (https://github.com/haleyyoung/balletBot.git)
