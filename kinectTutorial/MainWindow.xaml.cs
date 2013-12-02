@@ -27,7 +27,7 @@ namespace kinectTutorial
         KinectSensor kinect = null;
         Skeleton[] skeletonData;
         Skeleton skeleton;
-        Gesture gesture;
+        Gesture modeGesture;
         Plie plie;
         public Boolean pliesMode = false;
         private const int FRONT_VIEW = 0;
@@ -90,13 +90,21 @@ namespace kinectTutorial
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
-                if (this.gesture == null && this.skeleton != null)
+                if (this.modeGesture == null && this.skeleton != null)
                 {
-                    this.gesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
+                    this.modeGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
                 }
-                if (this.gesture.gestureStart())
+                if (this.modeGesture.gestureStart())
                 {
                     this.pliesMode = !pliesMode;
+
+                    // Show demo button if we're in plies mode
+                    Rectangle demoButton = (Rectangle)Canvas.FindName("pliesDemoButton");
+                    demoButton.Visibility = pliesMode ?
+                        Visibility.Visible : Visibility.Hidden;
+                    TextBlock demoButtonText = (TextBlock)Canvas.FindName("pliesDemoButtonLabel");
+                    demoButtonText.Visibility = pliesMode ?
+                        Visibility.Visible : Visibility.Hidden;
                 }
 
                 DrawSkeleton(skeleton, FRONT_VIEW);
