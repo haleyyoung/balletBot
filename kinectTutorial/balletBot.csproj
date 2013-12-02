@@ -81,6 +81,7 @@
     <Compile Include="Arrowheads\ArrowLine.cs" />
     <Compile Include="Arrowheads\ArrowLineBase.cs" />
     <Compile Include="Arrowheads\ArrowPolyline.cs" />
+    <Compile Include="Point3D.cs" />
     <Compile Include="Plie.cs" />
     <Compile Include="Gesture.cs" />
     <Compile Include="SkeletonHelpers.cs" />

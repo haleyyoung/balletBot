@@ -28,6 +28,7 @@ namespace kinectTutorial
         Skeleton[] skeletonData;
         Skeleton skeleton;
         Gesture gesture;
+        Plie plie;
         public Boolean pliesMode = false;
         private const int FRONT_VIEW = 0;
         private const int SIDE_VIEW = 1;
@@ -103,12 +104,22 @@ namespace kinectTutorial
 
                 if (pliesMode)
                 {
-                    Plie plie = new Plie(EllipseCanvas, skeleton);
-                    Boolean plieStatus = plie.trackPlie();
+                    if ((this.plie == null || this.plie.gestureComplete) &&
+                        this.skeleton != null)
+                    {
+                        this.plie = new Plie(EllipseCanvas, skeleton);
+                    }
+                    Boolean plieStatus = this.plie.trackPlie();
                     if (!plieStatus)
                     {
+                        this.plie = null;
+                        return;
+                    }
+                    Boolean bottomStatus = this.plie.plieBottomReached;
+                    if (bottomStatus)
+                    {
                         TextBlock warning = new TextBlock();
-                        warning.Text = "You're not doing a plie!!!";
+                        warning.Text = "Bottom reached";
                         warning.Background = Brushes.Lime;
                         Canvas.Children.Add(warning);
                         Canvas.SetTop(warning, 500);
