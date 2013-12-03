@@ -90,7 +90,7 @@ namespace kinectTutorial
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
-                if (this.modeGesture == null && this.skeleton != null)
+                if (this.modeGesture == null)
                 {
                     this.modeGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
                 }
@@ -112,26 +112,14 @@ namespace kinectTutorial
 
                 if (pliesMode)
                 {
-                    if ((this.plie == null || this.plie.gestureComplete) &&
-                        this.skeleton != null)
+                    if (this.plie == null || this.plie.plieCompleteBannerFrames > 120)
                     {
                         this.plie = new Plie(EllipseCanvas, skeleton);
                     }
-                    Boolean plieStatus = this.plie.trackPlie();
-                    if (!plieStatus)
+                    if (!this.plie.trackPlie() ||
+                        this.plie.gestureComplete && this.plie.showSuccessBanner())
                     {
                         this.plie = null;
-                        return;
-                    }
-                    Boolean bottomStatus = this.plie.plieBottomReached;
-                    if (bottomStatus)
-                    {
-                        TextBlock warning = new TextBlock();
-                        warning.Text = "Bottom reached";
-                        warning.Background = Brushes.Lime;
-                        Canvas.Children.Add(warning);
-                        Canvas.SetTop(warning, 500);
-                        Canvas.SetLeft(warning, 200);
                     }
                 }
             }

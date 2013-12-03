@@ -12,14 +12,16 @@
         <Canvas x:Name="Canvas">
         <Rectangle Name="pliesButton"  Fill="#E02B50" Stroke="#FCEAEE" StrokeThickness="2" Width="75" Height="23" Canvas.Left="10" Canvas.Top="100"/>
         <TextBlock Name="pliesButtonLabel" Foreground="WhiteSmoke" FontSize="20" FontFamily="Comic Sans MS" Text="Plies" Canvas.Left="26" Canvas.Top="97"/>
-        <Rectangle Name="pliesDemoButton"  Fill="#9933FF" Stroke="#F5EBFF" StrokeThickness="2" Width="75" Height="23" Canvas.Left="300" Canvas.Top="30" Visibility="Hidden"/>
-        <TextBlock Name="pliesDemoButtonLabel" Foreground="WhiteSmoke" FontSize="20" FontFamily="Comic Sans MS" Text="Demo!" Canvas.Left="309" Canvas.Top="27" Visibility="Hidden"/>
-            <Canvas x:Name="EllipseCanvas" Background="Transparent">
+        <Rectangle Name="pliesDemoButton"  Fill="#9933FF" Stroke="#F5EBFF" StrokeThickness="2" Width="75" Height="23" Canvas.Left="150" Canvas.Top="30" Visibility="Hidden"/>
+        <TextBlock Name="pliesDemoButtonLabel" Foreground="WhiteSmoke" FontSize="20" FontFamily="Comic Sans MS" Text="Demo!" Canvas.Left="159" Canvas.Top="27" Visibility="Hidden"/>
+        <Canvas x:Name="EllipseCanvas" Background="Transparent">
             <Image HorizontalAlignment="Left" Name="image1" Height="720" Margin="-336,0,0,-30"
                 VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>
             <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"
                 Background="Green" Foreground="Red" Margin="0,0,0,462.8" />
-            <MediaElement Source="Resources/IMG_1923.wmv" Width="300" Height="700"/>
         </Canvas>
+        <MediaElement Source="Resources/IMG_1923.wmv" Width="300" Height="700"/>
+        <Image Name="moveCompletedImage" Source="Resources/redBalletShoes.jpg" Visibility="Hidden" Height="525" Width="676" Canvas.Left="132" Canvas.Top="73" />
+        <TextBlock Name="plieCompletedText" Foreground="#CC0000" FontSize="45" FontFamily="Comic Sans MS" FontWeight="ExtraBold" Text="You completed a plie!" Canvas.Left="150" Canvas.Top="515" Visibility="Hidden"/>
     </Canvas>
 </Window>

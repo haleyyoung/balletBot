@@ -27,10 +27,11 @@ namespace kinectTutorial
         public Boolean gestureComplete = false;
         public Boolean plieBottomReached = false;
         public int plieMovingUpFrames = 0;
+        public int plieCompleteBannerFrames = 0;
         public Skeleton skeleton = null;
         public Canvas canvas;
-        public Point3D leftKneeTop;
-        public Point3D rightKneeTop;
+        public Range leftKneeTopRange;
+        public Range rightKneeTopRange;
         public Point3D leftKneePreviousFrame;
         public Point3D rightKneePreviousFrame;
         public Range leftFootXRange;
@@ -44,22 +45,26 @@ namespace kinectTutorial
         {
             this.skeleton = skeleton;
             this.canvas = canvas;
-            this.leftKneeTop = new Point3D(skeleton.Joints[JointType.KneeLeft].Position.X,
+            Point3D leftKnee = new Point3D(skeleton.Joints[JointType.KneeLeft].Position.X,
                 skeleton.Joints[JointType.KneeLeft].Position.Y,
                 skeleton.Joints[JointType.KneeLeft].Position.Z);
-            this.rightKneeTop = new Point3D(skeleton.Joints[JointType.KneeRight].Position.X,
+            Point3D rightKnee = new Point3D(skeleton.Joints[JointType.KneeRight].Position.X,
                 skeleton.Joints[JointType.KneeRight].Position.Y,
                 skeleton.Joints[JointType.KneeRight].Position.Z);
 
-            this.leftKneePreviousFrame = this.leftKneeTop;
-            this.rightKneePreviousFrame = this.rightKneeTop;
+            // Set initial "previous frame" to current frame position
+            this.leftKneePreviousFrame = leftKnee;
+            this.rightKneePreviousFrame = rightKnee;
 
-            this.leftFootXRange = new Range(skeleton.Joints[JointType.FootLeft].Position.X, Range.hipIntermediateRange);
-            this.leftFootYRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Y, Range.hipIntermediateRange);
-            this.leftFootZRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Z, Range.hipIntermediateRange);
-            this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.hipIntermediateRange);
-            this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.hipIntermediateRange);
-            this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.hipIntermediateRange);
+            this.leftKneeTopRange = new Range(leftKnee.y, Range.hipIntermediateRange);
+            this.rightKneeTopRange = new Range(rightKnee.y, Range.hipIntermediateRange);
+
+            this.leftFootXRange = new Range(skeleton.Joints[JointType.FootLeft].Position.X, Range.hipEasyRange);
+            this.leftFootYRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Y, Range.hipEasyRange);
+            this.leftFootZRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Z, Range.hipEasyRange);
+            this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.hipEasyRange);
+            this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.hipEasyRange);
+            this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.hipEasyRange);
 
         }
 
@@ -94,89 +99,57 @@ namespace kinectTutorial
             Range rightKneeRange = new Range(this.rightKneePreviousFrame.y, Range.hipHardRange);
 
             // Folllow process of movement for a plie
-
-            // On our way down
-            if (!this.plieBottomReached)
+            // Make sure feet are turned out and haven't moved
+            if (leftFootTurnout() &&
+                rightFootTurnout() &&
+                leftFootStable() &&
+                rightFootStable()
+            )
             {
-                TextBlock blah = new TextBlock();
-                if (// Make sure feet are turned out
-                    leftFootTurnout() &&
-                    rightFootTurnout() &&
-                    // Check to make sure feet haven't moved
-                    leftFootStable() &&
-                    rightFootStable()
-                )
+                // On our way down
+                if (!this.plieBottomReached)
                 {
-                    if (leftKnee.Position.Y <= leftKneeRange.maximum &&
-                        rightKnee.Position.Y <= rightKneeRange.maximum
-                    )
                     {
-                        blah.Text = "tracking plie " + (leftKnee.Position.Y == leftKneePreviousFrame.y);
-                        blah.Background = Brushes.Red;
-                        blah.FontSize = 20;
-                        canvas.Children.Add(blah);
-                        Canvas.SetTop(blah, 200);
-                    }
-                    else
-                    {
-                        blah.Text = "leftKnee " + (leftKnee.Position.Y <= leftKneeRange.maximum) +
-                            " rightKnee " + (rightKnee.Position.Y <= rightKneeRange.maximum);
-                        blah.Background = Brushes.Purple;
-                        blah.FontSize = 20;
-                        canvas.Children.Add(blah);
-                        Canvas.SetTop(blah, 700);
-                        this.plieMovingUpFrames++;
-                        if (this.plieMovingUpFrames >= 5)
+                        if (leftKnee.Position.Y <= leftKneeRange.maximum ||
+                            rightKnee.Position.Y <= rightKneeRange.maximum
+                        )
                         {
-                            this.plieBottomReached = true;
+                            //suggestions.Text = "tracking plie " + (leftKnee.Position.Y == leftKneePreviousFrame.y);
                         }
-                    }
-
-                    this.leftKneePreviousFrame = new Point3D(leftKnee.Position.X, leftKnee.Position.Y, leftKnee.Position.Z);
-                    this.rightKneePreviousFrame = new Point3D(rightKnee.Position.X, rightKnee.Position.Y, rightKnee.Position.Z);
-                    return true;
-                }
-                return false;
-            }
-            // On our way up
-            else
-            {
-                TextBlock blah = new TextBlock();
-                if (// Make sure feet are turned out
-                    leftFootTurnout() &&
-                    rightFootTurnout() &&
-                    // Check to make sure feet haven't moved
-                    leftFootStable() &&
-                    rightFootStable()
-                   )
-                {
-                    if (leftKnee.Position.Y >= leftKneeRange.minimum &&
-                        rightKnee.Position.Y >= rightKneeRange.minimum
-                    )
-                    {
-                        if (leftKnee.Position.Y >= this.leftKneeTop.y &&
-                            rightKnee.Position.Y >= this.leftKneeTop.y)
+                        else
                         {
-                            this.gestureComplete = true;
+                            this.plieMovingUpFrames++;
+
+                            if (this.plieMovingUpFrames >= 5)
+                            {
+                                this.plieBottomReached = true;
+                            }
                         }
 
-                        blah.Text = "on our way up";
-                        blah.Background = Brushes.Purple;
-                        blah.FontSize = 20;
-                        canvas.Children.Add(blah);
-                        Canvas.SetTop(blah, 600);
                         this.leftKneePreviousFrame = new Point3D(leftKnee.Position.X, leftKnee.Position.Y, leftKnee.Position.Z);
                         this.rightKneePreviousFrame = new Point3D(rightKnee.Position.X, rightKnee.Position.Y, rightKnee.Position.Z);
                         return true;
                     }
                 }
-                blah.Text = "returning false";
-                blah.Background = Brushes.Green;
-                blah.FontSize = 20;
-                canvas.Children.Add(blah);
-                Canvas.SetTop(blah, 300);
-                return false;
+                // On our way up
+                else
+                {
+                    if (leftKnee.Position.Y >= leftKneeRange.minimum ||
+                        rightKnee.Position.Y >= rightKneeRange.minimum
+                    )
+                    {
+                        if (leftKnee.Position.Y >= this.leftKneeTopRange.minimum &&
+                            rightKnee.Position.Y >= this.rightKneeTopRange.minimum)
+                        {
+                            this.gestureComplete = true;
+                        }
+                        this.leftKneePreviousFrame = new Point3D(leftKnee.Position.X, leftKnee.Position.Y, leftKnee.Position.Z);
+                        this.rightKneePreviousFrame = new Point3D(rightKnee.Position.X, rightKnee.Position.Y, rightKnee.Position.Z);
+                        return true;
+                    }
+                }
             }
+            return false;
         }
 
         public Boolean leftFootStable()
@@ -258,6 +231,27 @@ namespace kinectTutorial
                 return true;
             }
             blah.Text = "right foot NOT turned out";
+            return false;
+        }
+
+        public Boolean showSuccessBanner()
+        {
+            Image imageToShow = (Image)this.canvas.FindName("moveCompletedImage");
+            TextBlock textToShow = (TextBlock)this.canvas.FindName("plieCompletedText");
+
+            this.plieCompleteBannerFrames++;
+
+            if (this.plieCompleteBannerFrames < 120)
+            {
+                imageToShow.Visibility = Visibility.Visible;
+                textToShow.Visibility = Visibility.Visible;
+            }
+            else
+            {   
+                imageToShow.Visibility = Visibility.Hidden;
+                textToShow.Visibility = Visibility.Hidden;
+                return true;
+            }
             return false;
         }
     }
