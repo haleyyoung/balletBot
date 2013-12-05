@@ -102,8 +102,8 @@ namespace kinectTutorial
                 {
                     this.firstPositionGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("firstPositionButton"), this.firstPositionMode);
                 }
-                this.pliesMode = handleGesture(this.pliesGesture, "pliesButton", "pliesDemoButton", "pliesDemoButtonLabel", this.pliesMode);
-                this.firstPositionMode = handleGesture(this.firstPositionGesture, "firstPositionButton", "firstPositionDemoButton", "firstPositionDemoButtonLabel", this.pliesMode);
+                this.pliesMode = handleGesture(this.pliesGesture, "pliesButton", this.pliesMode);
+                this.firstPositionMode = handleGesture(this.firstPositionGesture, "firstPositionButton", this.firstPositionMode);
 
                 DrawSkeleton(skeleton, FRONT_VIEW);
                 DrawSkeleton(skeleton, SIDE_VIEW);
@@ -158,21 +158,38 @@ namespace kinectTutorial
             }
         }
 
-        Boolean handleGesture(Gesture gesture, String modeButtonName, String demoButtonName, String demoLabelName, Boolean buttonOn)
+        Boolean handleGesture(Gesture gesture, String modeButtonName, Boolean buttonOn)
         {
             if (gesture.gestureStart())
             {
                 buttonOn = !buttonOn;
-
-                // Show demo button if we turned a mode on
-                Rectangle demoButton = (Rectangle)Canvas.FindName(demoButtonName);
-                demoButton.Visibility = buttonOn ?
-                    Visibility.Visible : Visibility.Hidden;
-                TextBlock demoButtonText = (TextBlock)Canvas.FindName(demoLabelName);
-                demoButtonText.Visibility = buttonOn ?
-                    Visibility.Visible : Visibility.Hidden;
+                turnOffOtherButtons(modeButtonName, buttonOn);
             }
+
+            // Show demo button if we turned a mode on
+            Rectangle demoButton = (Rectangle)Canvas.FindName("demoButton");
+            demoButton.Visibility = buttonOn ?
+                Visibility.Visible : Visibility.Hidden;
+            TextBlock demoButtonText = (TextBlock)Canvas.FindName("demoButtonLabel");
+            demoButtonText.Visibility = buttonOn ?
+                Visibility.Visible : Visibility.Hidden;
             return buttonOn;
+        }
+
+        // This is used to make sure only one button is active at a time
+        void turnOffOtherButtons(String modeButtonName, Boolean buttonState)
+        {
+            Rectangle modeButtonHandle = (Rectangle)this.Canvas.FindName(modeButtonName);
+            if (!Object.Equals(modeButtonName, "pliesButton"))
+            {
+                this.pliesMode = false;
+                this.pliesGesture.turnOffButton();
+            }
+            if (!Object.Equals(modeButtonName, "firstPositionButton"))
+            {
+                this.firstPositionMode = false;
+                this.firstPositionGesture.turnOffButton();
+            }
         }
 
         void StopKinect(KinectSensor sensor)

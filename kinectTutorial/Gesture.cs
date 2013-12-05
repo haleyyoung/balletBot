@@ -32,10 +32,10 @@ namespace kinectTutorial
         public Canvas canvas;
         public Rectangle button;
         public Boolean buttonOn;
-        private Brush buttonOnColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#59B6A0");
-        private Brush buttonOnBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#DEF0EC");
-        private Brush buttonOffColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#E02B50");
-        private Brush buttonOffBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#EBFFE0");
+        public Brush buttonOnColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#59B6A0");
+        public Brush buttonOnBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#DEF0EC");
+        public Brush buttonOffColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#E02B50");
+        public Brush buttonOffBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#EBFFE0");
 
         public Gesture(Canvas canvas, Skeleton skeleton, Rectangle button, Boolean buttonOn)
         {
@@ -85,6 +85,13 @@ namespace kinectTutorial
                 return true;
             }
             return false;
+        }
+
+        public void turnOffButton()
+        {
+            this.buttonOn = false;
+            this.button.Fill = this.buttonOffColor;
+            this.button.Stroke = this.buttonOffBorderColor;
         }
     }
 }
