@@ -24,6 +24,7 @@ namespace kinectTutorial
         public int positionCompleteBannerFrames = 0;
         public Skeleton skeleton = null;
         public Canvas canvas;
+        public TextBlock correction;
         public Range leftFootXRange;
         public Range leftFootYRange;
         public Range leftFootZRange;
@@ -42,7 +43,10 @@ namespace kinectTutorial
             this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.hipEasyRange);
             this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.hipEasyRange);
             this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.hipEasyRange);
-
+            this.correction = new TextBlock();
+            correction.Background = Brushes.Orange;
+            correction.FontSize = 40;
+            Canvas.SetTop(correction, 200);
         }
 
         public Boolean firstPosition()
@@ -54,12 +58,6 @@ namespace kinectTutorial
 
             checkAlignment();
 
-            TextBlock blah = new TextBlock();
-            blah.Background = Brushes.Pink;
-            blah.FontSize = 50;
-            canvas.Children.Add(blah);
-            Canvas.SetTop(blah, 300);
-            Canvas.SetLeft(blah, 100);
             Joint rightAnkle = this.skeleton.Joints[JointType.AnkleRight];
             Joint leftAnkle = this.skeleton.Joints[JointType.AnkleLeft];
             Joint rightHip = this.skeleton.Joints[JointType.HipRight];
@@ -71,15 +69,6 @@ namespace kinectTutorial
             // Make sure feet are not wider than the hips
             Range rightHipXComparison = new Range(rightHip.Position.X, Range.hipEasyRange);
             Range leftHipXComparison = new Range(leftHip.Position.X, Range.hipEasyRange);
-
-            blah.Text = "" + (rightAnkleYComparison.inRange(leftAnkle.Position.Y) +"\n"+
-                    (rightAnkleZComparison.inRange(leftAnkle.Position.Z)) +"\n"+
-                    (rightAnkle.Position.X <= rightHipXComparison.maximum) + "\n" +
-                    (leftAnkle.Position.X >= leftHipXComparison.minimum) + "\n" +
-                    rightFootStable() + "\n" +
-                    leftFootStable() + "\n" +
-                    rightFootTurnout() + "\n" +
-                    leftFootTurnout());
 
             return (rightAnkleYComparison.inRange(leftAnkle.Position.Y) &&
                     rightAnkleZComparison.inRange(leftAnkle.Position.Z) &&
@@ -110,10 +99,6 @@ namespace kinectTutorial
 
         public Boolean leftFootStable()
         {
-            TextBlock blah = new TextBlock();
-            blah.Background = Brushes.Orange;
-            canvas.Children.Add(blah);
-            Canvas.SetTop(blah, 200);
             Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
 
             if (this.leftFootXRange.minimum <= leftFoot.Position.X &&
@@ -124,19 +109,15 @@ namespace kinectTutorial
                 this.leftFootZRange.maximum >= leftFoot.Position.Z
             )
             {
-                blah.Text = "stable";
+                correction.Text += "\nleft foot =     stable";
                 return true;
             }
-            blah.Text = "left foot NOT stable";
+            correction.Text += "\nleft foot = NOT stable";
             return false;
         }
 
         public Boolean rightFootStable()
         {
-            TextBlock blah = new TextBlock();
-            blah.Background = Brushes.Orange;
-            canvas.Children.Add(blah);
-            Canvas.SetTop(blah, 300);
             Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
 
             if (this.rightFootXRange.minimum <= rightFoot.Position.X &&
@@ -147,46 +128,38 @@ namespace kinectTutorial
                 this.rightFootZRange.maximum >= rightFoot.Position.Z
             )
             {
-                blah.Text = "stable";
+                correction.Text += "\nright foot =     stable";
                 return true;
             }
-            blah.Text = "right foot NOT stable";
+            correction.Text += "\nright foot = NOT stable";
             return false;
         }
 
         public Boolean leftFootTurnout()
         {
-            TextBlock blah = new TextBlock();
-            blah.Background = Brushes.Orange;
-            canvas.Children.Add(blah);
-            Canvas.SetTop(blah, 400);
             Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
             Joint leftAnkle = this.skeleton.Joints[JointType.AnkleLeft];
 
             if (leftFoot.Position.X <= leftAnkle.Position.X)
             {
-                blah.Text = "turned out";
+                correction.Text += "\nleft foot =     turned out";
                 return true;
             }
-            blah.Text = "left foot NOT turned out";
+            correction.Text += "\nleft foot = NOT turned out";
             return false;
         }
 
         public Boolean rightFootTurnout()
         {
-            TextBlock blah = new TextBlock();
-            blah.Background = Brushes.Orange;
-            canvas.Children.Add(blah);
-            Canvas.SetTop(blah, 500);
             Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
             Joint rightAnkle = this.skeleton.Joints[JointType.AnkleRight];
 
             if (rightFoot.Position.X >= rightAnkle.Position.X)
             {
-                blah.Text = "turned out";
+                correction.Text += "\nright foot =     turned out";
                 return true;
             }
-            blah.Text = "right foot NOT turned out";
+            correction.Text += "\nright foot NOT turned out";
             return false;
         }
 

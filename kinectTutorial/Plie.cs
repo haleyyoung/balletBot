@@ -100,7 +100,7 @@ namespace kinectTutorial
 
             Range leftKneeRange = new Range(this.leftKneePreviousFrame.y, Range.hipHardRange);
             Range rightKneeRange = new Range(this.rightKneePreviousFrame.y, Range.hipHardRange);
-
+            this.position.correction.Text = "";
             // Folllow process of movement for a plie
             // Make sure feet are turned out and haven't moved
             if (this.position.leftFootTurnout() &&
@@ -109,6 +109,7 @@ namespace kinectTutorial
                 this.position.rightFootStable()
             )
             {
+                //canvas.Children.Add(this.position.correction);
                 // On our way down
                 if (!this.plieBottomReached)
                 {
@@ -133,6 +134,7 @@ namespace kinectTutorial
                 // On our way up
                 else
                 {
+                    //canvas.Children.Add(this.position.correction);
                     if (leftKnee.Position.Y >= leftKneeRange.minimum ||
                         rightKnee.Position.Y >= rightKneeRange.minimum
                     )

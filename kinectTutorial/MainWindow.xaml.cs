@@ -167,14 +167,6 @@ namespace kinectTutorial
                 buttonOn = !buttonOn;
                 turnOffOtherButtons(modeButtonName, buttonOn);
             }
-
-            // Show demo button if we turned a mode on
-            Rectangle demoButton = (Rectangle)Canvas.FindName("demoButton");
-            demoButton.Visibility = buttonOn ?
-                Visibility.Visible : Visibility.Hidden;
-            TextBlock demoButtonText = (TextBlock)Canvas.FindName("demoButtonLabel");
-            demoButtonText.Visibility = buttonOn ?
-                Visibility.Visible : Visibility.Hidden;
             return buttonOn;
         }
 
