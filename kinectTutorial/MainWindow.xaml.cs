@@ -117,7 +117,7 @@ namespace kinectTutorial
                         this.plie = new Plie(EllipseCanvas, skeleton);
                     }
                     if (this.plie.gestureComplete && this.plie.showSuccessBanner() ||
-                        !this.plie.trackPlie())
+                        !this.plie.gestureComplete && !this.plie.trackPlie())
                     {
                         this.plie = null;
                     }

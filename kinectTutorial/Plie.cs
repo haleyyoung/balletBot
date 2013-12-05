@@ -154,19 +154,18 @@ namespace kinectTutorial
         public Boolean showSuccessBanner()
         {
             Image imageToShow = (Image)this.canvas.FindName("moveCompletedImage");
-            TextBlock textToShow = (TextBlock)this.canvas.FindName("plieCompletedText");
 
             this.plieCompleteBannerFrames++;
 
             if (this.plieCompleteBannerFrames < 120)
             {
+                imageToShow.Width = this.canvas.ActualWidth;
+                imageToShow.Height = this.canvas.ActualHeight;
                 imageToShow.Visibility = Visibility.Visible;
-                textToShow.Visibility = Visibility.Visible;
             }
             else
             {   
                 imageToShow.Visibility = Visibility.Hidden;
-                textToShow.Visibility = Visibility.Hidden;
                 return true;
             }
             return false;
