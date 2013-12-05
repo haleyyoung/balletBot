@@ -10,10 +10,14 @@
         <ImageBrush ImageSource="Resources/emptyroom.png" Stretch="Fill"/>
     </Window.Background>
         <Canvas x:Name="Canvas">
-        <Rectangle Name="pliesButton"  Fill="#E02B50" Stroke="#FCEAEE" StrokeThickness="2" Width="75" Height="23" Canvas.Left="10" Canvas.Top="100"/>
-        <TextBlock Name="pliesButtonLabel" Foreground="WhiteSmoke" FontSize="20" FontFamily="Comic Sans MS" Text="Plies" Canvas.Left="26" Canvas.Top="97"/>
-        <Rectangle Name="pliesDemoButton"  Fill="#9933FF" Stroke="#F5EBFF" StrokeThickness="2" Width="75" Height="23" Canvas.Left="150" Canvas.Top="30" Visibility="Hidden"/>
-        <TextBlock Name="pliesDemoButtonLabel" Foreground="WhiteSmoke" FontSize="20" FontFamily="Comic Sans MS" Text="Demo!" Canvas.Left="159" Canvas.Top="27" Visibility="Hidden"/>
+        <Rectangle Name="pliesButton"  Fill="#E02B50" Stroke="#FCEAEE" StrokeThickness="2" Width="125" Height="40" Canvas.Left="10" Canvas.Top="100"/>
+        <TextBlock Name="pliesButtonLabel" Foreground="WhiteSmoke" FontSize="36" FontFamily="Comic Sans MS" Text="Plies" Canvas.Left="36" Canvas.Top="95"/>
+        <Rectangle Name="pliesDemoButton"  Fill="#9933FF" Stroke="#F5EBFF" StrokeThickness="2" Width="125" Height="40" Canvas.Left="150" Canvas.Top="30" Visibility="Hidden"/>
+        <TextBlock Name="pliesDemoButtonLabel" Foreground="WhiteSmoke" FontSize="36" FontFamily="Comic Sans MS" Text="Demo!" Canvas.Left="161" Canvas.Top="25" Visibility="Hidden"/>
+        <Rectangle Name="firstPositionButton"  Fill="#E02B50" Stroke="#FCEAEE" StrokeThickness="2" Width="125" Height="40" Canvas.Left="10" Canvas.Top="150"/>
+        <TextBlock Name="firstPositionButtonLabel" Foreground="WhiteSmoke" FontSize="22" FontFamily="Comic Sans MS" Text="1st Position" Canvas.Left="14" Canvas.Top="153"/>
+        <Rectangle Name="firstPositionDemoButton"  Fill="#9933FF" Stroke="#F5EBFF" StrokeThickness="2" Width="125" Height="40" Canvas.Left="150" Canvas.Top="30" Visibility="Hidden"/>
+        <TextBlock Name="firstPositionDemoButtonLabel" Foreground="WhiteSmoke" FontSize="36" FontFamily="Comic Sans MS" Text="Demo!" Canvas.Left="161" Canvas.Top="25" Visibility="Hidden"/>
         <Canvas x:Name="EllipseCanvas" Background="Transparent">
             <Image HorizontalAlignment="Left" Name="image1" Height="720" Margin="-336,0,0,-30"
                 VerticalAlignment="Top" Width="960" RenderTransformOrigin="-3.062,1.56"/>

@@ -27,9 +27,12 @@ namespace kinectTutorial
         KinectSensor kinect = null;
         Skeleton[] skeletonData;
         Skeleton skeleton;
-        Gesture modeGesture;
+        Gesture pliesGesture;
+        Gesture firstPositionGesture;
         Plie plie;
+        Position position;
         public Boolean pliesMode = false;
+        public Boolean firstPositionMode = false;
         private const int FRONT_VIEW = 0;
         private const int SIDE_VIEW = 1;
 
@@ -90,36 +93,44 @@ namespace kinectTutorial
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
-                if (this.modeGesture == null)
-                {
-                    this.modeGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
-                }
-                if (this.modeGesture.gestureStart())
-                {
-                    this.pliesMode = !pliesMode;
 
-                    // Show demo button if we're in plies mode
-                    Rectangle demoButton = (Rectangle)Canvas.FindName("pliesDemoButton");
-                    demoButton.Visibility = pliesMode ?
-                        Visibility.Visible : Visibility.Hidden;
-                    TextBlock demoButtonText = (TextBlock)Canvas.FindName("pliesDemoButtonLabel");
-                    demoButtonText.Visibility = pliesMode ?
-                        Visibility.Visible : Visibility.Hidden;
+                if (this.pliesGesture == null)
+                {
+                    this.pliesGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
                 }
+                if (this.firstPositionGesture == null)
+                {
+                    this.firstPositionGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("firstPositionButton"), this.firstPositionMode);
+                }
+                this.pliesMode = handleGesture(this.pliesGesture, "pliesButton", "pliesDemoButton", "pliesDemoButtonLabel", this.pliesMode);
+                this.firstPositionMode = handleGesture(this.firstPositionGesture, "firstPositionButton", "firstPositionDemoButton", "firstPositionDemoButtonLabel", this.pliesMode);
 
                 DrawSkeleton(skeleton, FRONT_VIEW);
                 DrawSkeleton(skeleton, SIDE_VIEW);
 
                 if (pliesMode)
                 {
-                    if (this.plie == null || this.plie.plieCompleteBannerFrames > 120)
+                    if (this.plie == null)
                     {
                         this.plie = new Plie(EllipseCanvas, skeleton);
                     }
-                    if (!this.plie.trackPlie() ||
-                        this.plie.gestureComplete && this.plie.showSuccessBanner())
+                    if (this.plie.gestureComplete && this.plie.showSuccessBanner() ||
+                        !this.plie.trackPlie())
                     {
                         this.plie = null;
+                    }
+                }
+
+                if (firstPositionMode)
+                {
+                    if (this.position == null)
+                    {
+                        this.position = new Position(EllipseCanvas, skeleton);
+                    }
+                    if (this.position.gestureComplete && this.position.showSuccessBanner() ||
+                        !this.position.firstPosition())
+                    {
+                        this.position = null;
                     }
                 }
             }
@@ -147,10 +158,21 @@ namespace kinectTutorial
             }
         }
 
-        private void PliesMode(object sender, RoutedEventArgs e)
+        Boolean handleGesture(Gesture gesture, String modeButtonName, String demoButtonName, String demoLabelName, Boolean buttonOn)
         {
-            this.pliesMode = !pliesMode;
-            // TODO: change color of button
+            if (gesture.gestureStart())
+            {
+                buttonOn = !buttonOn;
+
+                // Show demo button if we turned a mode on
+                Rectangle demoButton = (Rectangle)Canvas.FindName(demoButtonName);
+                demoButton.Visibility = buttonOn ?
+                    Visibility.Visible : Visibility.Hidden;
+                TextBlock demoButtonText = (TextBlock)Canvas.FindName(demoLabelName);
+                demoButtonText.Visibility = buttonOn ?
+                    Visibility.Visible : Visibility.Hidden;
+            }
+            return buttonOn;
         }
 
         void StopKinect(KinectSensor sensor)

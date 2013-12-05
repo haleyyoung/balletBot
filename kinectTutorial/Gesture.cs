@@ -32,8 +32,8 @@ namespace kinectTutorial
         public Canvas canvas;
         public Rectangle button;
         public Boolean buttonOn;
-        private Brush buttonOnColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#99FF66");
-        private Brush buttonOnBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#FCEAEE");
+        private Brush buttonOnColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#59B6A0");
+        private Brush buttonOnBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#DEF0EC");
         private Brush buttonOffColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#E02B50");
         private Brush buttonOffBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#EBFFE0");
 
@@ -48,12 +48,12 @@ namespace kinectTutorial
         public Boolean gestureStart()
         {
             Joint hand = skeleton.Joints[JointType.HandLeft];
-            double handYDrawn = hand.Position.Y * -250 + 247.5;
-            double handXDrawn = hand.Position.X * 250 + 247.5;
+            double handYDrawn = hand.Position.Y * -250 + 245;
+            double handXDrawn = hand.Position.X * 250 + 245;
             double buttonTop = Canvas.GetTop(this.button);
-            double buttonBottom = buttonTop + 23;
+            double buttonBottom = buttonTop + this.button.ActualHeight;
             double buttonLeft = Canvas.GetLeft(this.button);
-            double buttonRight = buttonLeft + 75;
+            double buttonRight = buttonLeft + this.button.ActualWidth;
             Rectangle buttonFill = new Rectangle();
 
             if (handYDrawn >= buttonTop && handYDrawn <= buttonBottom &&

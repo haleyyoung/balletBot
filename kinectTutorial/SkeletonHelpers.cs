@@ -108,10 +108,10 @@ namespace kinectTutorial
         {
             if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
             {
-                Ellipse follow = new Ellipse() {Height = 5, Width = 5, Fill = Brushes.BlueViolet};
+                Ellipse follow = new Ellipse() {Height = 10, Width = 10, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(follow);
-                Canvas.SetTop(follow, joint.Position.Y * -250 + 247.5);
-                Canvas.SetLeft(follow, joint.Position.X * 250 + 247.5);
+                Canvas.SetTop(follow, joint.Position.Y * -250 + 245);
+                Canvas.SetLeft(follow, joint.Position.X * 250 + 245);
             }
         }
 
@@ -119,10 +119,10 @@ namespace kinectTutorial
         {
             if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
             {
-                Ellipse sideJoint = new Ellipse() {Height = 5, Width  = 5, Fill = Brushes.BlueViolet};
+                Ellipse sideJoint = new Ellipse() {Height = 10, Width  = 10, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(sideJoint);
-                Canvas.SetTop(sideJoint, joint.Position.Y * -250 + 247.5);
-                Canvas.SetLeft(sideJoint, joint.Position.Z * 200 + 147.5);
+                Canvas.SetTop(sideJoint, joint.Position.Y * -250 + 245);
+                Canvas.SetLeft(sideJoint, joint.Position.Z * 200 + 145);
             }
         }
 
@@ -135,7 +135,7 @@ namespace kinectTutorial
             {
                 Point p1 = new Point(start.Position.X * 250 + 250, start.Position.Y * -250 + 250);
                 Point p2 = new Point(end.Position.X * 250 + 250, end.Position.Y * -250 + 250);
-                Line line = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.MediumOrchid, StrokeThickness = 3};
+                Line line = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.MediumOrchid, StrokeThickness = 7};
                 EllipseCanvas.Children.Add(line);
             }
         }
@@ -149,7 +149,7 @@ namespace kinectTutorial
             {
                 Point p1 = new Point(start.Position.Z * 200 + 150, start.Position.Y * -250 + 250);
                 Point p2 = new Point( end.Position.Z * 200 + 150, end.Position.Y * -250 + 250);
-                Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.CornflowerBlue, StrokeThickness = 3 };
+                Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.CornflowerBlue, StrokeThickness = 7};
                 EllipseCanvas.Children.Add(line);
             }
         }
