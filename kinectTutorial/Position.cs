@@ -20,15 +20,10 @@ namespace kinectTutorial
     class Position
     {
         public Boolean gestureComplete = false;
-        public Boolean plieBottomReached = false;
-        public int plieMovingUpFrames = 0;
-        public int plieCompleteBannerFrames = 0;
+        public int positionBufferFrames = 0;
+        public int positionCompleteBannerFrames = 0;
         public Skeleton skeleton = null;
         public Canvas canvas;
-        public Range leftKneeTopRange;
-        public Range rightKneeTopRange;
-        public Point3D leftKneePreviousFrame;
-        public Point3D rightKneePreviousFrame;
         public Range leftFootXRange;
         public Range leftFootYRange;
         public Range leftFootZRange;
@@ -48,6 +43,69 @@ namespace kinectTutorial
             this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.hipEasyRange);
             this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.hipEasyRange);
 
+        }
+
+        public Boolean firstPosition()
+        {
+            if (skeleton == null)
+            {
+                return false;
+            }
+
+            checkAlignment();
+
+            TextBlock blah = new TextBlock();
+            blah.Background = Brushes.Pink;
+            blah.FontSize = 50;
+            canvas.Children.Add(blah);
+            Canvas.SetTop(blah, 300);
+            Canvas.SetLeft(blah, 100);
+            Joint rightAnkle = this.skeleton.Joints[JointType.AnkleRight];
+            Joint leftAnkle = this.skeleton.Joints[JointType.AnkleLeft];
+            Joint rightHip = this.skeleton.Joints[JointType.HipRight];
+            Joint leftHip = this.skeleton.Joints[JointType.HipLeft];
+
+            // Make sure feet are equally positioned on the floor (one foot isn't in front of the other)
+            Range rightAnkleYComparison = new Range(rightAnkle.Position.Y, Range.hipEasyRange);
+            Range rightAnkleZComparison = new Range(rightAnkle.Position.Z, Range.hipEasyRange);
+            // Make sure feet are not wider than the hips
+            Range rightHipXComparison = new Range(rightHip.Position.X, Range.hipEasyRange);
+            Range leftHipXComparison = new Range(leftHip.Position.X, Range.hipEasyRange);
+
+            blah.Text = "" + (rightAnkleYComparison.inRange(leftAnkle.Position.Y) +"\n"+
+                    (rightAnkleZComparison.inRange(leftAnkle.Position.Z)) +"\n"+
+                    (rightAnkle.Position.X <= rightHipXComparison.maximum) + "\n" +
+                    (leftAnkle.Position.X >= leftHipXComparison.minimum) + "\n" +
+                    rightFootStable() + "\n" +
+                    leftFootStable() + "\n" +
+                    rightFootTurnout() + "\n" +
+                    leftFootTurnout());
+
+            return (rightAnkleYComparison.inRange(leftAnkle.Position.Y) &&
+                    rightAnkleZComparison.inRange(leftAnkle.Position.Z) &&
+                    rightAnkle.Position.X <= rightHipXComparison.maximum &&
+                    leftAnkle.Position.X >= leftHipXComparison.minimum &&
+                    rightFootStable() &&
+                    leftFootStable() &&
+                    rightFootTurnout() &&
+                    leftFootTurnout()
+            );
+        }
+
+        public Boolean secondPosition()
+        {
+            return false;
+        }
+
+        public void checkAlignment()
+        {
+            // Alignment checks
+            MovementMode position = new MovementMode(this.canvas, this.skeleton);
+            position.hipAlignmentYAxis();
+            position.hipAlignmentZAxis();
+            position.spineAlignmentYAxis();
+            position.shoulderAlignmentYAxis();
+            position.shoulderAlignmentZAxis();
         }
 
         public Boolean leftFootStable()
@@ -71,64 +129,6 @@ namespace kinectTutorial
             }
             blah.Text = "left foot NOT stable";
             return false;
-        }
-
-        public Boolean firstPosition()
-        {
-            if (skeleton == null)
-            {
-                return false;
-            }
-
-            checkAlignment();
-
-            TextBlock blah = new TextBlock();
-            blah.Background = Brushes.Pink;
-            canvas.Children.Add(blah);
-            Canvas.SetTop(blah, 300);
-            Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
-            Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
-            Joint rightHip = this.skeleton.Joints[JointType.HipRight];
-            Joint leftHip = this.skeleton.Joints[JointType.HipLeft];
-
-            // Make sure feet are equally positioned on the floor (one foot isn't in front of the other)
-            Range rightFootYComparison = new Range(rightFoot.Position.Y, Range.hipEasyRange);
-            Range rightFootZComparison = new Range(rightFoot.Position.Z, Range.hipEasyRange);
-            // Make sure feet are not wider than the hips
-            Range rightHipXComparison = new Range(rightHip.Position.X, Range.hipEasyRange);
-            Range leftHipXComparison = new Range(leftHip.Position.X, Range.hipEasyRange);
-
-            blah.Text = "" + (rightFootYComparison.inRange(leftFoot.Position.Y) &&
-                    rightFoot.Position.X <= rightHipXComparison.maximum &&
-                    leftFoot.Position.X >= leftHipXComparison.minimum &&
-                    rightFootStable() &&
-                    leftFootStable() &&
-                    rightFootTurnout() &&
-                    leftFootTurnout());
-
-            return (rightFootYComparison.inRange(leftFoot.Position.Y) &&
-                    rightFoot.Position.X <= rightHipXComparison.maximum &&
-                    leftFoot.Position.X >= leftHipXComparison.minimum &&
-                    rightFootStable() &&
-                    leftFootStable() &&
-                    rightFootTurnout() &&
-                    leftFootTurnout());
-        }
-
-        public Boolean secondPosition()
-        {
-            return false;
-        }
-
-        public void checkAlignment()
-        {
-            // Alignment checks
-            MovementMode position = new MovementMode(this.canvas, this.skeleton);
-            position.hipAlignmentYAxis();
-            position.hipAlignmentZAxis();
-            position.spineAlignmentYAxis();
-            position.shoulderAlignmentYAxis();
-            position.shoulderAlignmentZAxis();
         }
 
         public Boolean rightFootStable()
@@ -195,9 +195,9 @@ namespace kinectTutorial
             Image imageToShow = (Image)this.canvas.FindName("moveCompletedImage");
             TextBlock textToShow = (TextBlock)this.canvas.FindName("plieCompletedText");
 
-            this.plieCompleteBannerFrames++;
+            this.positionCompleteBannerFrames++;
 
-            if (this.plieCompleteBannerFrames < 120)
+            if (this.positionCompleteBannerFrames < 120)
             {
                 imageToShow.Visibility = Visibility.Visible;
                 textToShow.Visibility = Visibility.Visible;

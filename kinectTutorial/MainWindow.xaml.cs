@@ -93,6 +93,8 @@ namespace kinectTutorial
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
+                EllipseCanvas.Height = Canvas.ActualHeight;
+                EllipseCanvas.Width = Canvas.ActualWidth;
 
                 if (this.pliesGesture == null)
                 {

@@ -106,35 +106,41 @@ namespace kinectTutorial
 
         private void DrawJointFrontView(Joint joint)
         {
+            double windowWidth = Canvas.ActualWidth;
+            double windowHeight = Canvas.ActualHeight;
             if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
             {
                 Ellipse follow = new Ellipse() {Height = 10, Width = 10, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(follow);
-                Canvas.SetTop(follow, joint.Position.Y * -250 + 245);
-                Canvas.SetLeft(follow, joint.Position.X * 250 + 245);
+                Canvas.SetTop(follow, (windowHeight/1.25 - 5) + joint.Position.Y * -(windowHeight/2));
+                Canvas.SetLeft(follow, joint.Position.X * (windowWidth/2) + (windowWidth/2 - 5));
             }
         }
 
         private void DrawJointSideView(Joint joint)
         {
+            double windowWidth = Canvas.ActualWidth;
+            double windowHeight = Canvas.ActualHeight;
             if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
             {
                 Ellipse sideJoint = new Ellipse() {Height = 10, Width  = 10, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(sideJoint);
-                Canvas.SetTop(sideJoint, joint.Position.Y * -250 + 245);
-                Canvas.SetLeft(sideJoint, joint.Position.Z * 200 + 145);
+                Canvas.SetTop(sideJoint, joint.Position.Y * -(windowHeight/2) + (windowHeight/1.25 - 5));
+                Canvas.SetLeft(sideJoint, joint.Position.Z * (windowWidth/4) - 5);
             }
         }
 
         private void DrawBoneFrontView(Joint start, Joint end)
         {
+            double windowWidth = Canvas.ActualWidth;
+            double windowHeight = Canvas.ActualHeight;
             if ((start.TrackingState == JointTrackingState.Tracked ||
                  start.TrackingState == JointTrackingState.Inferred) &&
                 (end.TrackingState == JointTrackingState.Tracked ||
                  end.TrackingState == JointTrackingState.Inferred))
             {
-                Point p1 = new Point(start.Position.X * 250 + 250, start.Position.Y * -250 + 250);
-                Point p2 = new Point(end.Position.X * 250 + 250, end.Position.Y * -250 + 250);
+                Point p1 = new Point(start.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/1.25) + start.Position.Y * -(windowHeight / 2));
+                Point p2 = new Point(end.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/1.25) + end.Position.Y * -(windowHeight / 2));
                 Line line = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.MediumOrchid, StrokeThickness = 7};
                 EllipseCanvas.Children.Add(line);
             }
@@ -142,13 +148,15 @@ namespace kinectTutorial
 
         private void DrawBoneSideView(Joint start, Joint end)
         {
+            double windowWidth = Canvas.ActualWidth;
+            double windowHeight = Canvas.ActualHeight;
             if ((start.TrackingState == JointTrackingState.Tracked ||
                  start.TrackingState == JointTrackingState.Inferred) &&
                 (end.TrackingState == JointTrackingState.Tracked ||
                  end.TrackingState == JointTrackingState.Inferred))
             {
-                Point p1 = new Point(start.Position.Z * 200 + 150, start.Position.Y * -250 + 250);
-                Point p2 = new Point( end.Position.Z * 200 + 150, end.Position.Y * -250 + 250);
+                Point p1 = new Point(start.Position.Z * (windowWidth/4), start.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
+                Point p2 = new Point(end.Position.Z * (windowWidth/4), end.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
                 Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.CornflowerBlue, StrokeThickness = 7};
                 EllipseCanvas.Children.Add(line);
             }

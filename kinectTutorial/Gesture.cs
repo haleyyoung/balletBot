@@ -47,9 +47,11 @@ namespace kinectTutorial
 
         public Boolean gestureStart()
         {
+            double windowWidth = canvas.Width;
+            double windowHeight = canvas.Height;
             Joint hand = skeleton.Joints[JointType.HandLeft];
-            double handYDrawn = hand.Position.Y * -250 + 245;
-            double handXDrawn = hand.Position.X * 250 + 245;
+            double handYDrawn = (windowHeight / 1.25 - 5) + hand.Position.Y * -(windowHeight / 2);
+            double handXDrawn = hand.Position.X * (windowWidth / 2) + (windowWidth / 2 - 5);
             double buttonTop = Canvas.GetTop(this.button);
             double buttonBottom = buttonTop + this.button.ActualHeight;
             double buttonLeft = Canvas.GetLeft(this.button);
