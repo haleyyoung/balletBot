@@ -20,6 +20,7 @@
             <TextBlock x:Name="Message"  HorizontalAlignment="Center" VerticalAlignment="Top" Height="30"
                 Background="Green" Foreground="Red" Margin="0,0,0,462.8" />
         </Canvas>
-        <Image Name="moveCompletedImage" Source="Resources/redBalletShoes.jpg" Visibility="Hidden" />
+        <Image Name="plieCompletedImage" Source="Resources/redBalletShoes.jpg" Visibility="Hidden" />
+        <Image Name="firstPositionCompletedImage" Source="Resources/balletLeap.jpg" Visibility="Hidden" />
     </Canvas>
 </Window>

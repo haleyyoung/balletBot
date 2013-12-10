@@ -60,6 +60,13 @@ namespace kinectTutorial.Properties {
             }
         }
         
+        public static System.Drawing.Bitmap balletLeap {
+            get {
+                object obj = ResourceManager.GetObject("balletLeap", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap emptyroom {
             get {
                 object obj = ResourceManager.GetObject("emptyroom", resourceCulture);
