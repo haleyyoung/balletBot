@@ -67,13 +67,6 @@ namespace kinectTutorial.Properties {
             }
         }
         
-        public static byte[] IMG_1923 {
-            get {
-                object obj = ResourceManager.GetObject("IMG_1923", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         public static System.Drawing.Bitmap redBalletShoes {
             get {
                 object obj = ResourceManager.GetObject("redBalletShoes", resourceCulture);

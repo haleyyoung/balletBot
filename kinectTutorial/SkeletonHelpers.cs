@@ -1,26 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+//using System.Text;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+//using System.Windows.Data;
+//using System.Windows.Documents;
+//using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+//using System.Windows.Media.Imaging;
+//using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
-using kinectTutorial;
+//using kinectTutorial;
 
 namespace kinectTutorial
 {
     public partial class MainWindow: Window
     {
+        static int jointDiameter = 10;
+        int boneThickness = 7;
+        double jointRadius = jointDiameter/2;
+        double windowHeightRatio = 1.25;
+        double windowWidthRatio = 4;
+
         private void DrawSkeleton(Skeleton skeleton, int view)
         {
+            // Sadly, the human body does not have an Euler Path, so this is the most efficient
+            // (least redundant) path to draw the body
             Joint[] topOfBodyDrawOrder = {
               skeleton.Joints[JointType.HandLeft],
               skeleton.Joints[JointType.WristLeft],
@@ -54,7 +62,7 @@ namespace kinectTutorial
             // Draw the joints
             foreach (Joint joint in skeleton.Joints)
             {
-                if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
+                if (jointTrackedOrInfered(joint))
                 {
                     if (view == FRONT_VIEW)
                     {
@@ -70,10 +78,9 @@ namespace kinectTutorial
             // Draw the bones
             for (int i = 0; i < topOfBodyDrawOrder.Length - 1; i++)
             {
-                if ((topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked ||
-                        topOfBodyDrawOrder[i].TrackingState == JointTrackingState.Inferred) &&
-                    (topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked ||
-                        topOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Inferred))
+                if (jointTrackedOrInfered(topOfBodyDrawOrder[i]) &&
+                    jointTrackedOrInfered(topOfBodyDrawOrder[i + 1])
+                )
                 {
                     if (view == FRONT_VIEW)
                     {
@@ -87,10 +94,9 @@ namespace kinectTutorial
             }
             for (int i = 0; i < bottomOfBodyDrawOrder.Length - 1; i++)
             {
-                if ((bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Tracked ||
-                        bottomOfBodyDrawOrder[i].TrackingState == JointTrackingState.Inferred) &&
-                    (bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Tracked ||
-                        bottomOfBodyDrawOrder[i + 1].TrackingState == JointTrackingState.Inferred))
+                if (jointTrackedOrInfered(bottomOfBodyDrawOrder[i]) &&
+                    jointTrackedOrInfered(bottomOfBodyDrawOrder[i + 1])
+                )
                 {
                     if (view == FRONT_VIEW)
                     {
@@ -108,12 +114,12 @@ namespace kinectTutorial
         {
             double windowWidth = Canvas.ActualWidth;
             double windowHeight = Canvas.ActualHeight;
-            if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
+            if (jointTrackedOrInfered(joint))
             {
-                Ellipse follow = new Ellipse() {Height = 10, Width = 10, Fill = Brushes.BlueViolet};
-                EllipseCanvas.Children.Add(follow);
-                Canvas.SetTop(follow, (windowHeight/1.25 - 5) + joint.Position.Y * -(windowHeight/2));
-                Canvas.SetLeft(follow, joint.Position.X * (windowWidth/2) + (windowWidth/2 - 5));
+                Ellipse frontJoint = new Ellipse() {Height = jointDiameter, Width = jointDiameter, Fill = Brushes.BlueViolet};
+                EllipseCanvas.Children.Add(frontJoint);
+                Canvas.SetTop(frontJoint, (windowHeight/windowHeightRatio - jointRadius) + joint.Position.Y * -(windowHeight/2));
+                Canvas.SetLeft(frontJoint, joint.Position.X * (windowWidth/2) + (windowWidth/2 - jointRadius));
             }
         }
 
@@ -121,12 +127,12 @@ namespace kinectTutorial
         {
             double windowWidth = Canvas.ActualWidth;
             double windowHeight = Canvas.ActualHeight;
-            if (joint.TrackingState == JointTrackingState.Tracked || joint.TrackingState == JointTrackingState.Inferred)
+            if (jointTrackedOrInfered(joint))
             {
-                Ellipse sideJoint = new Ellipse() {Height = 10, Width  = 10, Fill = Brushes.BlueViolet};
+                Ellipse sideJoint = new Ellipse() {Height = jointDiameter, Width  = jointDiameter, Fill = Brushes.BlueViolet};
                 EllipseCanvas.Children.Add(sideJoint);
-                Canvas.SetTop(sideJoint, joint.Position.Y * -(windowHeight/2) + (windowHeight/1.25 - 5));
-                Canvas.SetLeft(sideJoint, joint.Position.Z * (windowWidth/4) - 5);
+                Canvas.SetTop(sideJoint, joint.Position.Y * -(windowHeight/2) + (windowHeight/windowHeightRatio - jointRadius));
+                Canvas.SetLeft(sideJoint, joint.Position.Z * (windowWidth/windowWidthRatio) - jointRadius);
             }
         }
 
@@ -134,15 +140,14 @@ namespace kinectTutorial
         {
             double windowWidth = Canvas.ActualWidth;
             double windowHeight = Canvas.ActualHeight;
-            if ((start.TrackingState == JointTrackingState.Tracked ||
-                 start.TrackingState == JointTrackingState.Inferred) &&
-                (end.TrackingState == JointTrackingState.Tracked ||
-                 end.TrackingState == JointTrackingState.Inferred))
+            if (jointTrackedOrInfered(start) &&
+                jointTrackedOrInfered(end)
+            )
             {
-                Point p1 = new Point(start.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/1.25) + start.Position.Y * -(windowHeight / 2));
-                Point p2 = new Point(end.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/1.25) + end.Position.Y * -(windowHeight / 2));
-                Line line = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.MediumOrchid, StrokeThickness = 7};
-                EllipseCanvas.Children.Add(line);
+                Point p1 = new Point(start.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/windowHeightRatio) + start.Position.Y * -(windowHeight / 2));
+                Point p2 = new Point(end.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/windowHeightRatio) + end.Position.Y * -(windowHeight / 2));
+                Line frontBone = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.MediumOrchid, StrokeThickness = boneThickness};
+                EllipseCanvas.Children.Add(frontBone);
             }
         }
 
@@ -150,15 +155,13 @@ namespace kinectTutorial
         {
             double windowWidth = Canvas.ActualWidth;
             double windowHeight = Canvas.ActualHeight;
-            if ((start.TrackingState == JointTrackingState.Tracked ||
-                 start.TrackingState == JointTrackingState.Inferred) &&
-                (end.TrackingState == JointTrackingState.Tracked ||
-                 end.TrackingState == JointTrackingState.Inferred))
+            if (jointTrackedOrInfered(start) &&
+                jointTrackedOrInfered(end))
             {
-                Point p1 = new Point(start.Position.Z * (windowWidth/4), start.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-                Point p2 = new Point(end.Position.Z * (windowWidth/4), end.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-                Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.CornflowerBlue, StrokeThickness = 7};
-                EllipseCanvas.Children.Add(line);
+                Point p1 = new Point(start.Position.Z * (windowWidth/windowWidthRatio), start.Position.Y * -(windowHeight/2) + (windowHeight/windowHeightRatio));
+                Point p2 = new Point(end.Position.Z * (windowWidth/windowWidthRatio), end.Position.Y * -(windowHeight/2) + (windowHeight/windowHeightRatio));
+                Line sideBone = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.CornflowerBlue, StrokeThickness = boneThickness};
+                EllipseCanvas.Children.Add(sideBone);
             }
         }
 
@@ -188,6 +191,12 @@ namespace kinectTutorial
                     this.kinect.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
                 }
             }
+        }
+
+        public Boolean jointTrackedOrInfered(Joint joint)
+        {
+            return (joint.TrackingState == JointTrackingState.Tracked ||
+                joint.TrackingState == JointTrackingState.Inferred);
         }
     }
 }

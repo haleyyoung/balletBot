@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+//using System.Text;
+//using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+//using System.Windows.Controls;
+//using System.Windows.Data;
+//using System.Windows.Documents;
+//using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+//using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
-using kinectTutorial;
+//using kinectTutorial;
 
 namespace kinectTutorial
 {
@@ -86,13 +86,17 @@ namespace kinectTutorial
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //Intentionally blank
         }
 
+        // This method gets called every time the Kinect returns a new frame
         private void Render()
         {
             if (skeleton != null)
             {
                 EllipseCanvas.Children.Clear();
+
+                // Allow user to resize window
                 EllipseCanvas.Height = Canvas.ActualHeight;
                 EllipseCanvas.Width = Canvas.ActualWidth;
 
@@ -104,6 +108,7 @@ namespace kinectTutorial
                 {
                     this.firstPositionGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("firstPositionButton"), this.firstPositionMode);
                 }
+
                 this.pliesMode = handleGesture(this.pliesGesture, "pliesButton", this.pliesMode);
                 this.firstPositionMode = handleGesture(this.firstPositionGesture, "firstPositionButton", this.firstPositionMode);
 
@@ -116,6 +121,10 @@ namespace kinectTutorial
                     {
                         this.plie = new Plie(EllipseCanvas, skeleton);
                     }
+
+                    // If the user successfully completes a plie or breaks out of the plie movement sequence,
+                    // set our Plie object to null so we know to start over with a new Plie object when render gets
+                    // called again.
                     if (this.plie.gestureComplete && this.plie.showSuccessBanner() ||
                         !this.plie.gestureComplete && !this.plie.trackPlie())
                     {
@@ -129,6 +138,10 @@ namespace kinectTutorial
                     {
                         this.position = new Position(EllipseCanvas, skeleton);
                     }
+
+                    // If the user successfully completes a first position or breaks out of the first position
+                    // movement sequence, set our Position to null so we know to start over with a new Postition
+                    // when render gets called again.
                     if (this.position.gestureComplete && this.position.showSuccessBanner() ||
                         !this.position.firstPosition())
                     {
@@ -174,6 +187,7 @@ namespace kinectTutorial
         void turnOffOtherButtons(String modeButtonName, Boolean buttonState)
         {
             Rectangle modeButtonHandle = (Rectangle)this.Canvas.FindName(modeButtonName);
+
             if (!Object.Equals(modeButtonName, "pliesButton"))
             {
                 this.pliesMode = false;

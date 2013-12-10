@@ -131,9 +131,6 @@
     <Resource Include="Resources\emptyroom.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\IMG_1923.wmv" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\redBalletShoes.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
