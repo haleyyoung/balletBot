@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+//using System.Collections.Generic;
+//using System.Configuration;
+//using System.Data;
+//using System.Linq;
+//using System.Threading.Tasks;
 using Microsoft.Kinect;
 using System.Windows;
 using System.Windows.Media;
@@ -23,6 +23,9 @@ namespace kinectTutorial
         private double windowWidth;
         private double windowHeight;
         private SolidColorBrush correctionLineColor = Brushes.Red;
+        private int correctionLineThickness = 6;
+        private int correctionArrowThickness = 4;
+        private int correctionArrowLength = 50;
         private SolidColorBrush frontBackColor = Brushes.Yellow;
         private SolidColorBrush sideSideColor = Brushes.Orange;
         private SolidColorBrush upDownColor = Brushes.Green;
@@ -54,16 +57,16 @@ namespace kinectTutorial
 
             Point p1 = new Point(windowWidth - 250, 10);
             Point p2 = new Point(windowWidth - 250, 30);
-            ArrowLine downArrow = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = upDownColor, StrokeThickness = 4 };
-            ArrowLine upArrow = new ArrowLine() { X1 = p2.X + 20, Y1 = p2.Y, X2 = p1.X + 20, Y2 = p1.Y, Stroke = upDownColor, StrokeThickness = 4 };
+            ArrowLine downArrow = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = upDownColor, StrokeThickness = correctionArrowThickness };
+            ArrowLine upArrow = new ArrowLine() { X1 = p2.X + 20, Y1 = p2.Y, X2 = p1.X + 20, Y2 = p1.Y, Stroke = upDownColor, StrokeThickness = correctionArrowThickness };
             Point p3 = new Point(windowWidth - 250, 50);
             Point p4 = new Point(windowWidth - 230, 50);
-            ArrowLine rightArrow = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p4.X, Y2 = p4.Y, Stroke = sideSideColor, StrokeThickness = 4 };
-            ArrowLine leftArrow = new ArrowLine() { X1 = p4.X + 30, Y1 = p4.Y, X2 = p3.X + 30, Y2 = p3.Y, Stroke = sideSideColor, StrokeThickness = 4 };
+            ArrowLine rightArrow = new ArrowLine() { X1 = p3.X, Y1 = p3.Y, X2 = p4.X, Y2 = p4.Y, Stroke = sideSideColor, StrokeThickness = correctionArrowThickness };
+            ArrowLine leftArrow = new ArrowLine() { X1 = p4.X + 30, Y1 = p4.Y, X2 = p3.X + 30, Y2 = p3.Y, Stroke = sideSideColor, StrokeThickness = correctionArrowThickness };
             Point p5 = new Point(windowWidth - 250, 80);
             Point p6 = new Point(windowWidth - 230, 100);
-            ArrowLine frontArrow = new ArrowLine() { X1 = p5.X, Y1 = p5.Y, X2 = p6.X, Y2 = p6.Y, Stroke = frontBackColor, StrokeThickness = 4 };
-            ArrowLine backArrow = new ArrowLine() { X1 = p6.X + 30, Y1 = p6.Y, X2 = p5.X + 30, Y2 = p5.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+            ArrowLine frontArrow = new ArrowLine() { X1 = p5.X, Y1 = p5.Y, X2 = p6.X, Y2 = p6.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
+            ArrowLine backArrow = new ArrowLine() { X1 = p6.X + 30, Y1 = p6.Y, X2 = p5.X + 30, Y2 = p5.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
 
             canvas.Children.Add(upDownMovement);
             canvas.Children.Add(sideToSideMovement);
@@ -84,41 +87,29 @@ namespace kinectTutorial
             return canvas;
         }
 
-        public void plies()
-        {
-            if (skeleton != null)
-            {
-                hipAlignmentYAxis();
-                hipAlignmentZAxis();
-                spineAlignmentYAxis();
-                shoulderAlignmentYAxis();
-                shoulderAlignmentZAxis();
-            }
-        }
-
         public void hipAlignmentYAxis()
         {
             Joint leftHip = (skeleton.Joints[JointType.HipLeft]);
             Joint rightHip = (skeleton.Joints[JointType.HipRight]);
             Range range = new Range(leftHip.Position.Y, Range.hipIntermediateRange);
 
-            Point p1 = new Point(rightHip.Position.X * (windowWidth/2) + (windowWidth/2), rightHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Point p2 = new Point(leftHip.Position.X * (windowWidth/2) + (windowWidth/2), leftHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 6 };
+            Point p1 = new Point(rightHip.Position.X * (windowWidth / 2) + (windowWidth / 2), rightHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Point p2 = new Point(leftHip.Position.X * (windowWidth / 2) + (windowWidth / 2), leftHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = correctionLineThickness };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
 
             if (rightHip.Position.Y < range.minimum)
             {
-                p3 = new Point(leftHip.Position.X * (windowWidth/2) + (windowWidth/2), leftHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 4 };
+                p3 = new Point(leftHip.Position.X * (windowWidth / 2) + (windowWidth / 2), leftHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = correctionLineThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
             else if (rightHip.Position.Y > range.maximum)
             {
-                p3 = new Point(rightHip.Position.X * (windowWidth/2) + (windowWidth/2), rightHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 4 };
+                p3 = new Point(rightHip.Position.X * (windowWidth / 2) + (windowWidth / 2), rightHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = correctionLineThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
@@ -130,22 +121,22 @@ namespace kinectTutorial
             Joint rightHip = skeleton.Joints[JointType.HipRight];
             Range range = new Range(leftHip.Position.Z, Range.hipIntermediateRange);
 
-            Point p1 = new Point(rightHip.Position.X * (windowWidth/2) + (windowWidth/2), rightHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Point p2 = new Point(leftHip.Position.X * (windowWidth/2) + (windowWidth/2), leftHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 6 };
+            Point p1 = new Point(rightHip.Position.X * (windowWidth / 2) + (windowWidth / 2), rightHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Point p2 = new Point(leftHip.Position.X * (windowWidth / 2) + (windowWidth / 2), leftHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = correctionLineThickness };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
             if (rightHip.Position.Z > range.maximum)
             {
-                p3 = new Point(rightHip.Position.X * (windowWidth/2) + (windowWidth/2), rightHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+                p3 = new Point(rightHip.Position.X * (windowWidth / 2) + (windowWidth / 2), rightHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
             else if (rightHip.Position.Z < range.minimum)
             {
-                p3 = new Point(leftHip.Position.X * (windowWidth/2) + (windowWidth/2), leftHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+                p3 = new Point(leftHip.Position.X * (windowWidth / 2) + (windowWidth / 2), leftHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
@@ -157,23 +148,23 @@ namespace kinectTutorial
             Joint centerShoulder = skeleton.Joints[JointType.ShoulderCenter];
             Range hipsRange = new Range(centerShoulder.Position.Z, Range.hipsToShouldersIntermediateRange);
 
-            Point p1 = new Point(centerHip.Position.X * (windowWidth/2) + (windowWidth/2), centerHip.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Point p2 = new Point(centerShoulder.Position.X * (windowWidth/2) + (windowWidth/2), centerShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 6 };
+            Point p1 = new Point(centerHip.Position.X * (windowWidth / 2) + (windowWidth / 2), centerHip.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Point p2 = new Point(centerShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), centerShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = correctionLineThickness };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
 
             if (centerHip.Position.Z > hipsRange.maximum)
             {
-                p3 = new Point(centerShoulder.Position.X * (windowWidth/2) + (windowWidth/2), centerShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25 - 50));
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+                p3 = new Point(centerShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), centerShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio - correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
             else if (centerHip.Position.Z < hipsRange.minimum)
             {
-                p3 = new Point(centerShoulder.Position.X * (windowWidth/2) + (windowWidth/2), centerShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+                p3 = new Point(centerShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), centerShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
@@ -185,23 +176,23 @@ namespace kinectTutorial
             Joint rightShoulder = (skeleton.Joints[JointType.ShoulderRight]);
             Range range = new Range(leftShoulder.Position.Y, Range.shoulderYIntermediateRange);
 
-            Point p1 = new Point(leftShoulder.Position.X * (windowWidth/2) + (windowWidth/2), leftShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Point p2 = new Point(rightShoulder.Position.X * (windowWidth/2) + (windowWidth/2), rightShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 6 };
+            Point p1 = new Point(leftShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), leftShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Point p2 = new Point(rightShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), rightShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = correctionLineThickness };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
 
             if (rightShoulder.Position.Y < range.minimum)
             {
-                p3 = new Point(leftShoulder.Position.X * (windowWidth/2) + (windowWidth/2), leftShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 4 };
+                p3 = new Point(leftShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), leftShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
             else if (rightShoulder.Position.Y > range.maximum)
             {
-                p3 = new Point(rightShoulder.Position.X * (windowWidth/2) + (windowWidth/2), rightShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = 4 };
+                p3 = new Point(rightShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), rightShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = upDownColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
@@ -213,23 +204,23 @@ namespace kinectTutorial
             Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
             Range range = new Range(leftShoulder.Position.Z, Range.shoulderIntermediateRange);
 
-            Point p1 = new Point(leftShoulder.Position.X * (windowWidth/2) + (windowWidth/2), leftShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Point p2 = new Point(rightShoulder.Position.X * (windowWidth/2) + (windowWidth/2), rightShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25));
-            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = 6 };
+            Point p1 = new Point(leftShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), leftShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Point p2 = new Point(rightShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), rightShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio));
+            Line line = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = correctionLineColor, StrokeThickness = correctionLineThickness };
             Point p3;
             ArrowLine directionLine = new ArrowLine();
 
             if (rightShoulder.Position.Z > range.maximum)
             {
-                p3 = new Point(leftShoulder.Position.X * (windowWidth/2) + (windowWidth/2), leftShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25 - 50));
-                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+                p3 = new Point(leftShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), leftShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio - correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p1.X, Y1 = p1.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }
             else if (rightShoulder.Position.Z < range.minimum)
             {
-                p3 = new Point(rightShoulder.Position.X * (windowWidth/2) + (windowWidth/2), rightShoulder.Position.Y * -(windowHeight/2) + (windowHeight/1.25 + 50));
-                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = 4 };
+                p3 = new Point(rightShoulder.Position.X * (windowWidth / 2) + (windowWidth / 2), rightShoulder.Position.Y * -(windowHeight / 2) + (windowHeight / MainWindow.windowHeightRatio + correctionArrowLength));
+                directionLine = new ArrowLine() { X1 = p2.X, Y1 = p2.Y, X2 = p3.X, Y2 = p3.Y, Stroke = frontBackColor, StrokeThickness = correctionArrowThickness };
                 canvas.Children.Add(line);
                 canvas.Children.Add(directionLine);
             }

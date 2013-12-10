@@ -1,19 +1,10 @@
 ﻿using System;
-//using System.Collections.Generic;
 using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 using System.Windows;
-//using System.Windows.Controls;
-//using System.Windows.Data;
-//using System.Windows.Documents;
-//using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-//using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
-//using kinectTutorial;
 
 namespace kinectTutorial
 {
@@ -125,7 +116,7 @@ namespace kinectTutorial
                     // If the user successfully completes a plie or breaks out of the plie movement sequence,
                     // set our Plie object to null so we know to start over with a new Plie object when render gets
                     // called again.
-                    if (this.plie.gestureComplete && this.plie.showSuccessBanner() ||
+                    if (this.plie.gestureComplete && this.plie.position.showSuccessBanner("moveCompletedImage") ||
                         !this.plie.gestureComplete && !this.plie.trackPlie())
                     {
                         this.plie = null;
@@ -142,7 +133,7 @@ namespace kinectTutorial
                     // If the user successfully completes a first position or breaks out of the first position
                     // movement sequence, set our Position to null so we know to start over with a new Postition
                     // when render gets called again.
-                    if (this.position.gestureComplete && this.position.showSuccessBanner() ||
+                    if (this.position.gestureComplete && this.position.showSuccessBanner("moveCompletedImage") ||
                         !this.position.firstPosition())
                     {
                         this.position = null;

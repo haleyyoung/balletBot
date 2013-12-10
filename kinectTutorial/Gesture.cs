@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
-using kinectTutorial;
 
 namespace kinectTutorial
 {
@@ -49,9 +38,12 @@ namespace kinectTutorial
         {
             double windowWidth = canvas.Width;
             double windowHeight = canvas.Height;
+
             Joint hand = skeleton.Joints[JointType.HandLeft];
-            double handYDrawn = (windowHeight / 1.25 - 5) + hand.Position.Y * -(windowHeight / 2);
-            double handXDrawn = hand.Position.X * (windowWidth / 2) + (windowWidth / 2 - 5);
+
+            double handYDrawn = (windowHeight / MainWindow.windowHeightRatio - MainWindow.jointRadius) + hand.Position.Y * -(windowHeight / 2);
+            double handXDrawn = hand.Position.X * (windowWidth / 2) + (windowWidth / 2 - MainWindow.jointRadius);
+
             double buttonTop = Canvas.GetTop(this.button);
             double buttonBottom = buttonTop + this.button.ActualHeight;
             double buttonLeft = Canvas.GetLeft(this.button);

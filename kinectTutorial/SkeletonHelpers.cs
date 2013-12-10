@@ -1,29 +1,30 @@
 ﻿using System;
-//using System.Collections.Generic;
 using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-//using System.Windows.Data;
-//using System.Windows.Documents;
-//using System.Windows.Input;
 using System.Windows.Media;
-//using System.Windows.Media.Imaging;
-//using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
-//using kinectTutorial;
 
 namespace kinectTutorial
 {
+    /// <summary>
+    /// This partial class contains all the helper methods for drawing out skeletons
+    /// on the MainWindow canvas as well as tracking skeletons. This partial class is
+    /// mostly used for visual elements of the application rather than functional
+    /// elements.
+    /// </summary>
     public partial class MainWindow: Window
     {
-        static int jointDiameter = 10;
+        public static int jointDiameter = 10;
         int boneThickness = 7;
-        double jointRadius = jointDiameter/2;
-        double windowHeightRatio = 1.25;
-        double windowWidthRatio = 4;
+        Brush jointColor = Brushes.BlueViolet;
+        Brush boneFrontColor = Brushes.MediumOrchid;
+        Brush boneSideColor = Brushes.CornflowerBlue;
+
+        public static double jointRadius = jointDiameter / 2;
+        public static double windowHeightRatio = 1.25;
+        public static double windowWidthRatio = 4;
 
         private void DrawSkeleton(Skeleton skeleton, int view)
         {
@@ -116,10 +117,10 @@ namespace kinectTutorial
             double windowHeight = Canvas.ActualHeight;
             if (jointTrackedOrInfered(joint))
             {
-                Ellipse frontJoint = new Ellipse() {Height = jointDiameter, Width = jointDiameter, Fill = Brushes.BlueViolet};
+                Ellipse frontJoint = new Ellipse() {Height = jointDiameter, Width = jointDiameter, Fill = jointColor};
                 EllipseCanvas.Children.Add(frontJoint);
-                Canvas.SetTop(frontJoint, (windowHeight/windowHeightRatio - jointRadius) + joint.Position.Y * -(windowHeight/2));
-                Canvas.SetLeft(frontJoint, joint.Position.X * (windowWidth/2) + (windowWidth/2 - jointRadius));
+                Canvas.SetTop(frontJoint, (windowHeight / windowHeightRatio - jointRadius) + joint.Position.Y * -(windowHeight / 2));
+                Canvas.SetLeft(frontJoint, joint.Position.X * (windowWidth / 2) + (windowWidth / 2 - jointRadius));
             }
         }
 
@@ -129,10 +130,10 @@ namespace kinectTutorial
             double windowHeight = Canvas.ActualHeight;
             if (jointTrackedOrInfered(joint))
             {
-                Ellipse sideJoint = new Ellipse() {Height = jointDiameter, Width  = jointDiameter, Fill = Brushes.BlueViolet};
+                Ellipse sideJoint = new Ellipse() {Height = jointDiameter, Width  = jointDiameter, Fill = jointColor};
                 EllipseCanvas.Children.Add(sideJoint);
-                Canvas.SetTop(sideJoint, joint.Position.Y * -(windowHeight/2) + (windowHeight/windowHeightRatio - jointRadius));
-                Canvas.SetLeft(sideJoint, joint.Position.Z * (windowWidth/windowWidthRatio) - jointRadius);
+                Canvas.SetTop(sideJoint, joint.Position.Y * -(windowHeight / 2) + (windowHeight / windowHeightRatio - jointRadius));
+                Canvas.SetLeft(sideJoint, joint.Position.Z * (windowWidth / windowWidthRatio) - jointRadius);
             }
         }
 
@@ -144,9 +145,9 @@ namespace kinectTutorial
                 jointTrackedOrInfered(end)
             )
             {
-                Point p1 = new Point(start.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/windowHeightRatio) + start.Position.Y * -(windowHeight / 2));
-                Point p2 = new Point(end.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight/windowHeightRatio) + end.Position.Y * -(windowHeight / 2));
-                Line frontBone = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.MediumOrchid, StrokeThickness = boneThickness};
+                Point p1 = new Point(start.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight / windowHeightRatio) + start.Position.Y * -(windowHeight / 2));
+                Point p2 = new Point(end.Position.X * (windowWidth / 2) + (windowWidth / 2), (windowHeight / windowHeightRatio) + end.Position.Y * -(windowHeight / 2));
+                Line frontBone = new Line() {X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = boneFrontColor, StrokeThickness = boneThickness};
                 EllipseCanvas.Children.Add(frontBone);
             }
         }
@@ -158,9 +159,9 @@ namespace kinectTutorial
             if (jointTrackedOrInfered(start) &&
                 jointTrackedOrInfered(end))
             {
-                Point p1 = new Point(start.Position.Z * (windowWidth/windowWidthRatio), start.Position.Y * -(windowHeight/2) + (windowHeight/windowHeightRatio));
-                Point p2 = new Point(end.Position.Z * (windowWidth/windowWidthRatio), end.Position.Y * -(windowHeight/2) + (windowHeight/windowHeightRatio));
-                Line sideBone = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = Brushes.CornflowerBlue, StrokeThickness = boneThickness};
+                Point p1 = new Point(start.Position.Z * (windowWidth / windowWidthRatio), start.Position.Y * -(windowHeight / 2) + (windowHeight / windowHeightRatio));
+                Point p2 = new Point(end.Position.Z * (windowWidth / windowWidthRatio), end.Position.Y * -(windowHeight / 2) + (windowHeight / windowHeightRatio));
+                Line sideBone = new Line() { X1 = p1.X, Y1 = p1.Y, X2 = p2.X, Y2 = p2.Y, Stroke = boneSideColor, StrokeThickness = boneThickness};
                 EllipseCanvas.Children.Add(sideBone);
             }
         }

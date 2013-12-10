@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Kinect;
-using kinectTutorial;
 
 namespace kinectTutorial
 {
@@ -81,14 +70,10 @@ namespace kinectTutorial
             );
         }
 
-        public Boolean secondPosition()
-        {
-            return false;
-        }
+        // The other 3 positions have yet to be implemented
 
         public void checkAlignment()
         {
-            // Alignment checks
             MovementMode position = new MovementMode(this.canvas, this.skeleton);
             position.hipAlignmentYAxis();
             position.hipAlignmentZAxis();
@@ -101,38 +86,26 @@ namespace kinectTutorial
         {
             Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
 
-            if (this.leftFootXRange.minimum <= leftFoot.Position.X &&
+            return (this.leftFootXRange.minimum <= leftFoot.Position.X &&
                 this.leftFootXRange.maximum >= leftFoot.Position.X &&
                 this.leftFootYRange.minimum <= leftFoot.Position.Y &&
                 this.leftFootYRange.maximum >= leftFoot.Position.Y &&
                 this.leftFootZRange.minimum <= leftFoot.Position.Z &&
                 this.leftFootZRange.maximum >= leftFoot.Position.Z
-            )
-            {
-                correction.Text += "\nleft foot =     stable";
-                return true;
-            }
-            correction.Text += "\nleft foot = NOT stable";
-            return false;
+            );
         }
 
         public Boolean rightFootStable()
         {
             Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
 
-            if (this.rightFootXRange.minimum <= rightFoot.Position.X &&
+            return (this.rightFootXRange.minimum <= rightFoot.Position.X &&
                 this.rightFootXRange.maximum >= rightFoot.Position.X &&
                 this.rightFootYRange.minimum <= rightFoot.Position.Y &&
                 this.rightFootYRange.maximum >= rightFoot.Position.Y &&
                 this.rightFootZRange.minimum <= rightFoot.Position.Z &&
                 this.rightFootZRange.maximum >= rightFoot.Position.Z
-            )
-            {
-                correction.Text += "\nright foot =     stable";
-                return true;
-            }
-            correction.Text += "\nright foot = NOT stable";
-            return false;
+            );
         }
 
         public Boolean leftFootTurnout()
@@ -140,13 +113,7 @@ namespace kinectTutorial
             Joint leftFoot = this.skeleton.Joints[JointType.FootLeft];
             Joint leftAnkle = this.skeleton.Joints[JointType.AnkleLeft];
 
-            if (leftFoot.Position.X <= leftAnkle.Position.X)
-            {
-                correction.Text += "\nleft foot =     turned out";
-                return true;
-            }
-            correction.Text += "\nleft foot = NOT turned out";
-            return false;
+            return (leftFoot.Position.X <= leftAnkle.Position.X);
         }
 
         public Boolean rightFootTurnout()
@@ -154,31 +121,24 @@ namespace kinectTutorial
             Joint rightFoot = this.skeleton.Joints[JointType.FootRight];
             Joint rightAnkle = this.skeleton.Joints[JointType.AnkleRight];
 
-            if (rightFoot.Position.X >= rightAnkle.Position.X)
-            {
-                correction.Text += "\nright foot =     turned out";
-                return true;
-            }
-            correction.Text += "\nright foot NOT turned out";
-            return false;
+            return (rightFoot.Position.X >= rightAnkle.Position.X);
         }
 
-        public Boolean showSuccessBanner()
+        public Boolean showSuccessBanner(String imageName)
         {
-            Image imageToShow = (Image)this.canvas.FindName("moveCompletedImage");
-            TextBlock textToShow = (TextBlock)this.canvas.FindName("plieCompletedText");
+            Image imageToShow = (Image)this.canvas.FindName(imageName);
 
             this.positionCompleteBannerFrames++;
 
             if (this.positionCompleteBannerFrames < 120)
             {
+                imageToShow.Width = this.canvas.ActualWidth;
+                imageToShow.Height = this.canvas.ActualHeight;
                 imageToShow.Visibility = Visibility.Visible;
-                textToShow.Visibility = Visibility.Visible;
             }
             else
             {
                 imageToShow.Visibility = Visibility.Hidden;
-                textToShow.Visibility = Visibility.Hidden;
                 return true;
             }
             return false;

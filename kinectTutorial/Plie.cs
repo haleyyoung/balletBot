@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Kinect;
-using kinectTutorial;
 
 namespace kinectTutorial
 {
@@ -24,12 +12,12 @@ namespace kinectTutorial
     /// </summary>
     class Plie
     {
+        public Skeleton skeleton = null;
+        public Canvas canvas;
         public Boolean gestureComplete = false;
         public Boolean plieBottomReached = false;
         public int plieMovingUpFrames = 0;
         public int plieCompleteBannerFrames = 0;
-        public Skeleton skeleton = null;
-        public Canvas canvas;
         public Position position;
         public Range leftKneeTopRange;
         public Range rightKneeTopRange;
@@ -83,12 +71,7 @@ namespace kinectTutorial
             }
 
             // Alignment checks
-            MovementMode plie = new MovementMode(this.canvas, this.skeleton);
-            plie.hipAlignmentYAxis();
-            plie.hipAlignmentZAxis();
-            plie.spineAlignmentYAxis();
-            plie.shoulderAlignmentYAxis();
-            plie.shoulderAlignmentZAxis();
+            this.position.checkAlignment();
 
             // Grab joints observed in a plie
             Joint leftKnee = skeleton.Joints[JointType.KneeLeft];
@@ -100,7 +83,7 @@ namespace kinectTutorial
 
             Range leftKneeRange = new Range(this.leftKneePreviousFrame.y, Range.hipHardRange);
             Range rightKneeRange = new Range(this.rightKneePreviousFrame.y, Range.hipHardRange);
-            this.position.correction.Text = "";
+
             // Folllow process of movement for a plie
             // Make sure feet are turned out and haven't moved
             if (this.position.leftFootTurnout() &&
@@ -109,7 +92,6 @@ namespace kinectTutorial
                 this.position.rightFootStable()
             )
             {
-                //canvas.Children.Add(this.position.correction);
                 // On our way down
                 if (!this.plieBottomReached)
                 {
@@ -134,7 +116,6 @@ namespace kinectTutorial
                 // On our way up
                 else
                 {
-                    //canvas.Children.Add(this.position.correction);
                     if (leftKnee.Position.Y >= leftKneeRange.minimum ||
                         rightKnee.Position.Y >= rightKneeRange.minimum
                     )
@@ -149,26 +130,6 @@ namespace kinectTutorial
                         return true;
                     }
                 }
-            }
-            return false;
-        }
-
-        public Boolean showSuccessBanner()
-        {
-            Image imageToShow = (Image)this.canvas.FindName("moveCompletedImage");
-
-            this.plieCompleteBannerFrames++;
-
-            if (this.plieCompleteBannerFrames < 120)
-            {
-                imageToShow.Width = this.canvas.ActualWidth;
-                imageToShow.Height = this.canvas.ActualHeight;
-                imageToShow.Visibility = Visibility.Visible;
-            }
-            else
-            {   
-                imageToShow.Visibility = Visibility.Hidden;
-                return true;
             }
             return false;
         }

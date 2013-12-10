@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace kinectTutorial
+﻿namespace kinectTutorial
 {
+    /// <summary>
+    /// The Point3D class allows for the use of 3-dimensional space in computations
+    /// in other classes.
+    /// </summary>
     class Point3D
     {
         public float x;
