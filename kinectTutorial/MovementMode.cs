@@ -264,6 +264,16 @@ namespace kinectTutorial
         public const float shoulderIntermediateRange = 0.003f;
         public const float shoulderHardRange = 0.001f;
 
+        // Knees y-axis alignment
+        public const float kneeEasyRange = 0.001f;
+        public const float kneeIntermediateRange = 0.003f;
+
+        // Feet x-axis alignment
+        public const float footEasyRange = 0.005f;
+
+        // Ankles x-axis alignment
+        public const float ankleEasyRange = 0.005f;
+
         public float minimum;
         public float maximum;
 

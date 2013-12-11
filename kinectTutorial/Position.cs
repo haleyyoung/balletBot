@@ -26,12 +26,12 @@ namespace kinectTutorial
             this.skeleton = skeleton;
             this.canvas = canvas;
 
-            this.leftFootXRange = new Range(skeleton.Joints[JointType.FootLeft].Position.X, Range.hipEasyRange);
-            this.leftFootYRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Y, Range.hipEasyRange);
-            this.leftFootZRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Z, Range.hipEasyRange);
-            this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.hipEasyRange);
-            this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.hipEasyRange);
-            this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.hipEasyRange);
+            this.leftFootXRange = new Range(skeleton.Joints[JointType.FootLeft].Position.X, Range.footEasyRange);
+            this.leftFootYRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Y, Range.footEasyRange);
+            this.leftFootZRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Z, Range.footEasyRange);
+            this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.footEasyRange);
+            this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.footEasyRange);
+            this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.footEasyRange);
             this.correction = new TextBlock();
             correction.Background = Brushes.Orange;
             correction.FontSize = 40;
@@ -53,8 +53,8 @@ namespace kinectTutorial
             Joint leftHip = this.skeleton.Joints[JointType.HipLeft];
 
             // Make sure feet are equally positioned on the floor (one foot isn't in front of the other)
-            Range rightAnkleYComparison = new Range(rightAnkle.Position.Y, Range.hipEasyRange);
-            Range rightAnkleZComparison = new Range(rightAnkle.Position.Z, Range.hipEasyRange);
+            Range rightAnkleYComparison = new Range(rightAnkle.Position.Y, Range.ankleEasyRange);
+            Range rightAnkleZComparison = new Range(rightAnkle.Position.Z, Range.ankleEasyRange);
             // Make sure feet are not wider than the hips
             Range rightHipXComparison = new Range(rightHip.Position.X, Range.hipEasyRange);
             Range leftHipXComparison = new Range(leftHip.Position.X, Range.hipEasyRange);

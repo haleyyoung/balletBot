@@ -47,15 +47,15 @@ namespace kinectTutorial
             this.leftKneePreviousFrame = leftKnee;
             this.rightKneePreviousFrame = rightKnee;
 
-            this.leftKneeTopRange = new Range(leftKnee.y, Range.hipIntermediateRange);
-            this.rightKneeTopRange = new Range(rightKnee.y, Range.hipIntermediateRange);
+            this.leftKneeTopRange = new Range(leftKnee.y, Range.kneeIntermediateRange);
+            this.rightKneeTopRange = new Range(rightKnee.y, Range.kneeIntermediateRange);
 
-            this.leftFootXRange = new Range(skeleton.Joints[JointType.FootLeft].Position.X, Range.hipEasyRange);
-            this.leftFootYRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Y, Range.hipEasyRange);
-            this.leftFootZRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Z, Range.hipEasyRange);
-            this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.hipEasyRange);
-            this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.hipEasyRange);
-            this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.hipEasyRange);
+            this.leftFootXRange = new Range(skeleton.Joints[JointType.FootLeft].Position.X, Range.footEasyRange);
+            this.leftFootYRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Y, Range.footEasyRange);
+            this.leftFootZRange = new Range(skeleton.Joints[JointType.FootLeft].Position.Z, Range.footEasyRange);
+            this.rightFootXRange = new Range(skeleton.Joints[JointType.FootRight].Position.X, Range.footEasyRange);
+            this.rightFootYRange = new Range(skeleton.Joints[JointType.FootRight].Position.Y, Range.footEasyRange);
+            this.rightFootZRange = new Range(skeleton.Joints[JointType.FootRight].Position.Z, Range.footEasyRange);
 
         }
 
@@ -81,8 +81,8 @@ namespace kinectTutorial
             Joint leftAnkle = skeleton.Joints[JointType.AnkleLeft];
             Joint rightAnkle = skeleton.Joints[JointType.AnkleRight];
 
-            Range leftKneeRange = new Range(this.leftKneePreviousFrame.y, Range.hipHardRange);
-            Range rightKneeRange = new Range(this.rightKneePreviousFrame.y, Range.hipHardRange);
+            Range leftKneeRange = new Range(this.leftKneePreviousFrame.y, Range.kneeEasyRange);
+            Range rightKneeRange = new Range(this.rightKneePreviousFrame.y, Range.kneeEasyRange);
 
             // Folllow process of movement for a plie
             // Make sure feet are turned out and haven't moved
