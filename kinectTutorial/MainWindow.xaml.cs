@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -93,11 +94,11 @@ namespace kinectTutorial
 
                 if (this.pliesGesture == null)
                 {
-                    this.pliesGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), this.pliesMode);
+                    this.pliesGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("pliesButton"), (TextBlock)Canvas.FindName("pliesTitle"), this.pliesMode);
                 }
                 if (this.firstPositionGesture == null)
                 {
-                    this.firstPositionGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("firstPositionButton"), this.firstPositionMode);
+                    this.firstPositionGesture = new Gesture(EllipseCanvas, skeleton, (Rectangle)Canvas.FindName("firstPositionButton"), (TextBlock)Canvas.FindName("firstPositionTitle"), this.firstPositionMode);
                 }
 
                 this.pliesMode = handleGesture(this.pliesGesture, "pliesButton", this.pliesMode);
@@ -108,6 +109,10 @@ namespace kinectTutorial
 
                 if (pliesMode)
                 {
+                    // Show title
+                    TextBlock title = (TextBlock)Canvas.FindName("pliesTitle");
+                    title.Visibility = Visibility.Visible;
+
                     if (this.plie == null)
                     {
                         this.plie = new Plie(EllipseCanvas, skeleton);
@@ -125,6 +130,10 @@ namespace kinectTutorial
 
                 if (firstPositionMode)
                 {
+                    // Show title
+                    TextBlock title = (TextBlock)Canvas.FindName("firstPositionTitle");
+                    title.Visibility = Visibility.Visible;
+
                     if (this.position == null)
                     {
                         this.position = new Position(EllipseCanvas, skeleton);
@@ -182,12 +191,12 @@ namespace kinectTutorial
             if (!Object.Equals(modeButtonName, "pliesButton"))
             {
                 this.pliesMode = false;
-                this.pliesGesture.turnOffButton();
+                this.pliesGesture.turnOffButton("pliesTitle");
             }
             if (!Object.Equals(modeButtonName, "firstPositionButton"))
             {
                 this.firstPositionMode = false;
-                this.firstPositionGesture.turnOffButton();
+                this.firstPositionGesture.turnOffButton("firstPositionTitle");
             }
         }
 

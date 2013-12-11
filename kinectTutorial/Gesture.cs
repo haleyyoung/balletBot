@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -20,17 +21,19 @@ namespace kinectTutorial
         public Skeleton skeleton = null;
         public Canvas canvas;
         public Rectangle button;
+        public TextBlock modeTitle;
         public Boolean buttonOn;
         public Brush buttonOnColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#59B6A0");
         public Brush buttonOnBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#DEF0EC");
         public Brush buttonOffColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#E02B50");
         public Brush buttonOffBorderColor = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#EBFFE0");
 
-        public Gesture(Canvas canvas, Skeleton skeleton, Rectangle button, Boolean buttonOn)
+        public Gesture(Canvas canvas, Skeleton skeleton, Rectangle button, TextBlock modeTitle, Boolean buttonOn)
         {
             this.skeleton = skeleton;
             this.canvas = canvas;
             this.button = button;
+            this.modeTitle = modeTitle;
             this.buttonOn = buttonOn;
         }
 
@@ -76,16 +79,19 @@ namespace kinectTutorial
                 this.buttonOn = !this.buttonOn;
                 this.button.Fill = buttonFill.Fill;
                 this.button.Stroke = buttonFill.Stroke;
+                this.modeTitle.Visibility = this.modeTitle.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
                 return true;
             }
             return false;
         }
 
-        public void turnOffButton()
+        public void turnOffButton(String titleName)
         {
             this.buttonOn = false;
             this.button.Fill = this.buttonOffColor;
             this.button.Stroke = this.buttonOffBorderColor;
+            TextBlock title = (TextBlock)canvas.FindName(titleName);
+            title.Visibility = Visibility.Hidden;
         }
     }
 }
