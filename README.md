@@ -23,6 +23,6 @@ In order to set up this project on your own computer you need:
 
   1. Windows OS
   2. xBox Kinect
-  2. [Microsoft Visual Studio] (http://go.microsoft.com/?linkid=9709939)
-  3. [Kinect for Windows SDK] (http://go.microsoft.com/fwlink/?LinkID=323588) (mostly for the driver it installs for the Kinect)
-  4. [A clone of this repository] (https://github.com/haleyyoung/balletBot.git)
+  3. [Microsoft Visual Studio] (http://go.microsoft.com/?linkid=9709939)
+  4. [Kinect for Windows SDK] (http://go.microsoft.com/fwlink/?LinkID=323588) (mostly for the driver it installs for the Kinect)
+  5. [A clone of this repository] (https://github.com/haleyyoung/balletBot.git)
