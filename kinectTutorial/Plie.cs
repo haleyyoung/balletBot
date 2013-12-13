@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Kinect;
 
-namespace kinectTutorial
+namespace balletBot
 {
     /// <summary>
     /// The Plie class handles the movement gesture of a ballet move called

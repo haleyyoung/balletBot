@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 
-namespace kinectTutorial
+namespace balletBot
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

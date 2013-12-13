@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 
-namespace kinectTutorial
+namespace balletBot
 {
     /// <summary>
     /// This partial class contains all the helper methods for drawing out skeletons

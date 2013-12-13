@@ -1,9 +1,4 @@
 ﻿using System;
-//using System.Collections.Generic;
-//using System.Configuration;
-//using System.Data;
-//using System.Linq;
-//using System.Threading.Tasks;
 using Microsoft.Kinect;
 using System.Windows;
 using System.Windows.Media;
@@ -11,7 +6,7 @@ using System.Windows.Shapes;
 using System.Windows.Controls;
 using Petzold.Media2D;
 
-namespace kinectTutorial
+namespace balletBot
 {
     /// <summary>
     /// Interaction logic for App.xaml

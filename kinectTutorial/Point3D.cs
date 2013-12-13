@@ -1,4 +1,4 @@
-﻿namespace kinectTutorial
+﻿namespace balletBot
 {
     /// <summary>
     /// The Point3D class allows for the use of 3-dimensional space in computations

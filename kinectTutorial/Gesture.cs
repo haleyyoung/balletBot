@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 
-namespace kinectTutorial
+namespace balletBot
 {
     /// <summary>
     /// The Gesture class handles the interaction of the user with a specific
